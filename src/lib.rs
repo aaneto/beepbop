@@ -37,14 +37,9 @@ mod tests {
 
         let mut runtime = Runtime::new().expect("Unable to create a runtime");
 
-        match runtime.block_on(bot.get_me()) {
-            Ok((_, user)) => {
-                assert!(user.is_bot, "getMe should return a bot.")
-            },
-            Err(error) => {
-                panic!(error.description().to_owned());
-            }
-        };
+        if let Err(error) = runtime.block_on(bot.get_me()) {
+            panic!(error.description().to_owned());
+        }
     }
 
 }
