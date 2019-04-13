@@ -81,3 +81,10 @@ And last there are the additional stuff that involve:
 ### Contributing
 
 All kinds of Pull Requests are welcome, from implementations to design suggestions. Just fork the code and create a PR named after the feature to be added.
+
+
+### Running Tests
+
+There are not a lot of tests right now, but you can run the tests by building the docker image after filling the important metadata (API_KEY only, for now).
+
+You can also set the env variables yourself and run cargo test.
