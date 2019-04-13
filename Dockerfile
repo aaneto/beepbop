@@ -9,6 +9,8 @@ WORKDIR /usr/src/app
 
 COPY Cargo.toml .
 
+# This is meant to cache the build between
+# source modifications.
 RUN cargo build
 # --release
 
@@ -23,4 +25,4 @@ RUN cargo test
 # in a client code.
 #
 # RUN cargo install --path .
-# CMD ["telegrambot"]
+# CMD ["yourapp"]
