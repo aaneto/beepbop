@@ -1,7 +1,7 @@
 pub mod args;
 pub mod datatypes;
 pub mod error;
-pub mod routes;
+pub mod methods;
 
 use std::sync::Arc;
 
