@@ -60,9 +60,9 @@ There is also functionalities not currently implemented, such as:
 - [ ] deleteWebhook
 - [ ] getWebhookInfo
 
-These are for getting updates via a webhook and involve setting up a tcp listener that reacts to responses with new updates. Since this lib aims to be disjoint of the robot actual logic, only creating, deleting and getting info about the webhook are necessary
+These are for getting updates via a webhook and involve setting up a tcp listener that reacts to responses with new updates. 
 
-for an implementation to be considered done.
+Since this lib aims to be disjoint of the robot actual logic, only creating, deleting and getting info about the webhook are necessary for an implementation to be considered done.
 
 
 
