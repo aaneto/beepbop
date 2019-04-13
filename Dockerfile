@@ -18,7 +18,7 @@ COPY src/ src/
 
 ENV API_KEY="YOUR_API_KEY"
 
-RUN cargo test
+CMD ["cargo", "test"]
 # --release
 
 # Run these if you use this dockerfile
