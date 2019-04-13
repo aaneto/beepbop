@@ -1,4 +1,4 @@
-# A Dockerfile that I made to run tests/bins on any computer with docker.
+# A Dockerfile for running tests/bins on any computer with docker.
 # Also useful for deploy strategies that uses containers.
 FROM rust:1.34
 
