@@ -1,3 +1,5 @@
+#![forbid(unsafe_code)]
+
 pub mod api;
 pub mod macros;
 
@@ -21,23 +23,26 @@ mod tests {
     //! Here should be included functionality tests
     //! for bots. That includes running actual API
     //! calls and expecting an return.
-    static API_KEY: &str = include_str!("../res/API_KEY");
-
-    use std::error::Error;
-
     use crate::api::Bot;
+    use std::error::Error;
     use tokio::runtime::Runtime;
 
     #[test]
     fn test_get_me() {
-        let bot = Bot::new(API_KEY);
+        let (_, api_key) = std::env::vars()
+            .find(|(key, _)| key == "API_KEY")
+            .expect("Cannot find API_KEY in ENV");
+
+        let bot = Bot::new(&api_key);
 
         let mut runtime = Runtime::new().expect("Unable to create a runtime");
 
         match runtime.block_on(bot.get_me()) {
-            Ok((_, user)) => (assert!(user.is_bot, "getMe should return a bot.")),
+            Ok((_, user)) => {
+                assert!(user.is_bot, "getMe should return a bot.")
+            },
             Err(error) => {
-                assert!(false, error.description().to_owned());
+                panic!(error.description().to_owned());
             }
         };
     }
