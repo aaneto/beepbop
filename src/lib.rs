@@ -2,6 +2,7 @@
 
 pub mod api;
 pub mod macros;
+pub mod util;
 
 pub mod prelude {
     pub use crate::api::args::*;
@@ -10,6 +11,7 @@ pub mod prelude {
     pub use crate::api::APIResponse;
     pub use crate::api::APIResult;
     pub use crate::api::Bot;
+    pub use crate::util::*;
     pub use futures;
     pub use futures::Future;
     pub use reqwest;
