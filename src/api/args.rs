@@ -44,10 +44,7 @@ pub struct SetChatTitle {
 
 impl SetChatTitle {
     pub fn new(chat_id: ChatID, title: String) -> Self {
-        Self {
-            chat_id,
-            title,
-        }
+        Self { chat_id, title }
     }
 }
 
@@ -60,55 +57,53 @@ pub enum ChatID {
 
 impl Default for ChatID {
     fn default() -> Self {
-        ChatID::Integer {chat_id: 0i64}
+        ChatID::Integer { chat_id: 0i64 }
     }
 }
 
 impl From<i64> for ChatID {
     fn from(id: i64) -> Self {
-        ChatID::Integer {chat_id: id}
+        ChatID::Integer { chat_id: id }
     }
 }
 
 impl From<i32> for ChatID {
     fn from(id: i32) -> Self {
-        ChatID::Integer {chat_id: id as i64}
+        ChatID::Integer { chat_id: id as i64 }
     }
 }
 
 impl From<u32> for ChatID {
     fn from(id: u32) -> Self {
-        ChatID::Integer {chat_id: id as i64}
+        ChatID::Integer { chat_id: id as i64 }
     }
 }
 
 impl From<String> for ChatID {
     fn from(id: String) -> Self {
-        ChatID::String {chat_id: id}
+        ChatID::String { chat_id: id }
     }
 }
 
 #[derive(Debug, Serialize)]
 pub struct GetChat {
     #[serde(flatten)]
-    pub chat_id: ChatID
+    pub chat_id: ChatID,
 }
 
 impl GetChat {
     pub fn new(chat_id: ChatID) -> Self {
-        Self {
-            chat_id
-        }
+        Self { chat_id }
     }
     pub fn from_integer(id: i64) -> Self {
         Self {
-            chat_id: ChatID::Integer {chat_id: id}
+            chat_id: ChatID::Integer { chat_id: id },
         }
     }
 
     pub fn from_string(id: String) -> Self {
         Self {
-            chat_id: ChatID::String {chat_id: id}
+            chat_id: ChatID::String { chat_id: id },
         }
     }
 }
@@ -186,7 +181,7 @@ pub enum InlineKeyboardButtonMessage {
 pub struct InlineKeyboardButton {
     pub text: String,
     #[serde(flatten)]
-    pub inline_message: InlineKeyboardButtonMessage
+    pub inline_message: InlineKeyboardButtonMessage,
 }
 
 #[derive(Debug, Default, Serialize)]
@@ -277,7 +272,7 @@ impl PinMessage {
         Self {
             chat_id,
             message_id,
-            disable_notification
+            disable_notification,
         }
     }
 }
@@ -319,7 +314,6 @@ impl SendLocation {
 
         self
     }
-
 }
 
 #[derive(Debug, Serialize)]
@@ -329,9 +323,7 @@ pub struct GetFile {
 
 impl GetFile {
     pub fn new(file_id: String) -> Self {
-        GetFile {
-            file_id
-        }
+        GetFile { file_id }
     }
 }
 
@@ -344,7 +336,7 @@ pub struct SendContact {
     pub vcard: Option<String>,
     pub disable_notification: bool,
     pub reply_to_message_id: Option<i64>,
-    pub reply_markup: Option<ReplyMarkup>
+    pub reply_markup: Option<ReplyMarkup>,
 }
 
 impl SendContact {

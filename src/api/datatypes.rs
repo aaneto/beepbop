@@ -20,7 +20,7 @@ pub struct Chat {
     pub invite_link: Option<String>,
     pub pinned_message: Option<RawMessage>,
     pub sticker_set_name: Option<String>,
-    pub can_set_sticker_set: Option<bool>
+    pub can_set_sticker_set: Option<bool>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -172,9 +172,6 @@ pub struct FileBuffer {
 
 impl FileBuffer {
     pub fn new(name: String, data: Vec<u8>) -> Self {
-        FileBuffer {
-            name,
-            data,
-        }
+        FileBuffer { name, data }
     }
 }

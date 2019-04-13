@@ -3,16 +3,17 @@
 /// and error of a future.
 macro_rules! log_all {
     ($future_obj:expr) => {
-        $future_obj.map(|data| {
-            println!("{:?}", data);
+        $future_obj
+            .map(|data| {
+                println!("{:?}", data);
 
-            ()
-        })
-        .map_err(|err| {
-            println!("{:?}", err);
-            
-            ()
-        })
+                ()
+            })
+            .map_err(|err| {
+                println!("{:?}", err);
+
+                ()
+            })
     };
 }
 
@@ -23,7 +24,7 @@ macro_rules! log_error {
     ($future_obj:expr) => {
         $future_obj.map_err(|err| {
             println!("{:?}", err);
-            
+
             ()
         })
     };
@@ -36,7 +37,7 @@ macro_rules! log_data {
     ($future_obj:expr) => {
         $future_obj.map(|data| {
             println!("{:?}", data);
-            
+
             ()
         })
     };

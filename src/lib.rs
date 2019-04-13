@@ -1,24 +1,23 @@
-pub mod macros;
 pub mod api;
+pub mod macros;
 
 pub mod prelude {
-    pub use reqwest;
-    pub use tokio;
-    pub use futures;
-    pub use futures::Future;
-    pub use crate::api::Bot;
     pub use crate::api::args::*;
-    pub use crate::api::APIResult;
-    pub use crate::api::APIResponse;
     pub use crate::api::datatypes::*;
     pub use crate::api::error::APIError;
+    pub use crate::api::APIResponse;
+    pub use crate::api::APIResult;
+    pub use crate::api::Bot;
+    pub use futures;
+    pub use futures::Future;
+    pub use reqwest;
+    pub use tokio;
 }
-
 
 #[cfg(test)]
 mod tests {
     //! General tests for the telegrambot wrapper.
-    //! 
+    //!
     //! Here should be included functionality tests
     //! for bots. That includes running actual API
     //! calls and expecting an return.

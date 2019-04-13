@@ -1,21 +1,21 @@
+pub mod args;
+pub mod datatypes;
 pub mod error;
 pub mod routes;
-pub mod datatypes;
-pub mod args;
 
 use std::sync::Arc;
 
-use futures::Future;  
 use futures::stream::Stream;
+use futures::Future;
 
+use reqwest::r#async::Chunk;
 use reqwest::r#async::Client;
 use reqwest::r#async::Response;
-use reqwest::r#async::Chunk;
 
 use serde_derive::{Deserialize, Serialize};
 
-use error::APIError;
 use datatypes::FileBuffer;
+use error::APIError;
 
 pub type APIResult<T> = Result<T, error::APIError>;
 
@@ -41,17 +41,19 @@ impl Bot {
         }
     }
 
-    pub fn download_file(self, file: datatypes::FileInfo) -> impl Future<Item = (Self, FileBuffer), Error = APIError> {
+    pub fn download_file(
+        self,
+        file: datatypes::FileInfo,
+    ) -> impl Future<Item = (Self, FileBuffer), Error = APIError> {
         let file_path = file.file_path.expect("API download file without file_path");
-        
+
         let uri = self.get_file_uri(&file_path);
-        
-        self.connection.client
+
+        self.connection
+            .client
             .get(&uri)
             .send()
-            .and_then(|response: Response| {
-                response.into_body().concat2()
-            })
+            .and_then(|response: Response| response.into_body().concat2())
             .map(move |chunks: Chunk| {
                 let file_buffer = datatypes::FileBuffer::new(file_path, chunks.to_vec());
 
@@ -72,7 +74,7 @@ impl Bot {
     #[inline]
     fn get_route(&self, route: &str) -> String {
         let url = "https://api.telegram.org/bot".to_string();
-        
+
         self.compose_url(url, route)
     }
 
@@ -86,7 +88,8 @@ impl Bot {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct APIResponse<T>
-where T: std::fmt::Debug
+where
+    T: std::fmt::Debug,
 {
     ok: bool,
     description: Option<String>,
@@ -95,7 +98,8 @@ where T: std::fmt::Debug
 }
 
 impl<T> APIResponse<T>
-where T: std::fmt::Debug
+where
+    T: std::fmt::Debug,
 {
     pub fn as_result(self) -> APIResult<T> {
         if self.ok {
