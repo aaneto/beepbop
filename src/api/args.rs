@@ -91,7 +91,7 @@ impl From<String> for ChatID {
 #[derive(Debug, Serialize)]
 pub struct GetChat {
     #[serde(flatten)]
-    chat_id: ChatID
+    pub chat_id: ChatID
 }
 
 impl GetChat {
@@ -191,15 +191,15 @@ pub struct InlineKeyboardButton {
 
 #[derive(Debug, Default, Serialize)]
 pub struct ReplyKeboardMarkup {
-    keyboard: Vec<Vec<KeyboardButton>>,
-    resize_keyboard: bool,
-    one_time_keyboard: bool,
-    selective: bool,
+    pub keyboard: Vec<Vec<KeyboardButton>>,
+    pub resize_keyboard: bool,
+    pub one_time_keyboard: bool,
+    pub selective: bool,
 }
 
 #[derive(Debug, Default, Serialize)]
 pub struct InlineKeyboardMarkup {
-    inline_keyboard: Vec<Vec<InlineKeyboardButton>>,
+    pub inline_keyboard: Vec<Vec<InlineKeyboardButton>>,
 }
 
 #[derive(Debug, Serialize)]
@@ -285,14 +285,14 @@ impl PinMessage {
 #[derive(Debug, Serialize)]
 pub struct SendLocation {
     #[serde(flatten)]
-    chat_id: ChatID,
-    latitude: f64,
-    longitude: f64,
-    live_period: Option<u32>,
-    disable_notification: Option<bool>,
-    reply_to_message_id: Option<i64>,
+    pub chat_id: ChatID,
+    pub latitude: f64,
+    pub longitude: f64,
+    pub live_period: Option<u32>,
+    pub disable_notification: Option<bool>,
+    pub reply_to_message_id: Option<i64>,
     #[serde(flatten)]
-    reply_markup: Option<ReplyMarkup>,
+    pub reply_markup: Option<ReplyMarkup>,
 }
 
 impl SendLocation {
