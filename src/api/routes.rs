@@ -262,4 +262,21 @@ impl Bot {
         }
         .execute()
     }
+
+    pub fn get_chat_admins<ID>(
+        self,
+        chat_id: ID,
+    ) -> impl Future<Item = (Self, Vec<ChatMember>), Error = APIError>
+    where
+        ID: Into<ChatID>,
+    {
+        TelegramRequest {
+            method: Method::GET,
+            route: self.get_route(&"getChatAdministrators"),
+            form: Some(chat_id.into()),
+            body: None::<Map>,
+            bot: self,
+        }
+        .execute()
+    }
 }
