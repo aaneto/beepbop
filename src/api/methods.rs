@@ -374,4 +374,18 @@ impl Bot {
         }
         .execute()
     }
+
+    pub fn restrict_chat_member(
+        self,
+        restrict_member: RestrictChatMember,
+    ) -> impl Future<Item = (Self, bool), Error = APIError> {
+        TelegramRequest {
+            method: Method::GET,
+            route: self.get_route(&"restrictChatMember"),
+            form: Some(restrict_member),
+            body: None::<Map>,
+            bot: self,
+        }
+        .execute()
+    }
 }
