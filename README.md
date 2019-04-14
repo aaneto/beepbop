@@ -51,7 +51,7 @@ There are some methods implemented and others in need of an implementation, here
 - [x] getChatMembersCount
 - [x] getChatMember
 - [x] setChatStickerSet
-- [ ] deleteChatStickerSet
+- [x] deleteChatStickerSet
 - [ ] answerCallbackQuery
 
 There is also functionalities not currently implemented, such as:

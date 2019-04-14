@@ -329,4 +329,24 @@ impl Bot {
         }
         .execute()
     }
+
+    /// Delete sticker set for a group or chat.
+    ///
+    /// Will only work if there is a sticker set defined.
+    pub fn delete_chat_sticker_set<ID>(
+        self,
+        chat_id: ID,
+    ) -> impl Future<Item = (Self, bool), Error = APIError>
+    where
+        ID: Into<ChatID>,
+    {
+        TelegramRequest {
+            method: Method::GET,
+            route: self.get_route(&"deleteChatStickerSet"),
+            form: Some(chat_id.into()),
+            body: None::<Map>,
+            bot: self,
+        }
+        .execute()
+    }
 }
