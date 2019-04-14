@@ -124,7 +124,7 @@ pub struct LabeledPrice {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub enum UpdateData {
+pub enum UpdateKind {
     #[serde(rename = "message")]
     Message(Message),
     #[serde(rename = "edited_message")]
@@ -149,7 +149,7 @@ pub enum UpdateData {
 pub struct Update {
     pub update_id: i64,
     #[serde(flatten)]
-    pub data: UpdateData,
+    pub data: UpdateKind,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
