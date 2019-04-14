@@ -47,7 +47,7 @@ There are some methods implemented and others in need of an implementation, here
 - [x] unpinChatMessage
 - [x] leaveChat
 - [x] getChat
-- [ ] getChatAdministrators
+- [x] getChatAdministrators
 - [x] getChatMembersCount
 - [ ] getChatMember
 - [ ] setChatStickerSet
