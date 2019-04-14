@@ -37,7 +37,7 @@ There are some methods implemented and others in need of an implementation, here
 - [ ] kickChatMember
 - [ ] unbanChatMember
 - [ ] restrictChatMember
-- [ ] promoteChatMember
+- [x] promoteChatMember
 - [ ] exportChatInviteLink
 - [ ] setChatPhoto
 - [ ] deleteChatPhoto
