@@ -302,4 +302,31 @@ impl Bot {
         }
         .execute()
     }
+
+    /// Set sticker set for a group or chat.
+    ///
+    /// Will only work for groups of at least
+    /// 100 members.
+    pub fn set_chat_sticker_set<ID>(
+        self,
+        chat_id: ID,
+        sticker_set: &str,
+    ) -> impl Future<Item = (Self, bool), Error = APIError>
+    where
+        ID: Into<ChatID>,
+    {
+        let set_chat_sticker_set = SetChatStickerSet {
+            sticker_set_name: sticker_set.to_string(),
+            chat_id: chat_id.into(),
+        };
+
+        TelegramRequest {
+            method: Method::GET,
+            route: self.get_route(&"setChatStickerSet"),
+            form: Some(set_chat_sticker_set),
+            body: None::<Map>,
+            bot: self,
+        }
+        .execute()
+    }
 }

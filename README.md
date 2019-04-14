@@ -50,7 +50,7 @@ There are some methods implemented and others in need of an implementation, here
 - [x] getChatAdministrators
 - [x] getChatMembersCount
 - [x] getChatMember
-- [ ] setChatStickerSet
+- [x] setChatStickerSet
 - [ ] deleteChatStickerSet
 - [ ] answerCallbackQuery
 

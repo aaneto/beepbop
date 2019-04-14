@@ -357,3 +357,10 @@ pub struct GetChatMember {
     pub chat_id: ChatID,
     pub user_id: i64,
 }
+
+#[derive(Default, Debug, Serialize)]
+pub struct SetChatStickerSet {
+    #[serde(flatten)]
+    pub chat_id: ChatID,
+    pub sticker_set_name: String,
+}
