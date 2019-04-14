@@ -5,6 +5,8 @@ use crate::prelude::*;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
+use reqwest::r#async::multipart::Form;
+use reqwest::r#async::RequestBuilder;
 use reqwest::r#async::Response;
 
 enum Method {
@@ -12,91 +14,79 @@ enum Method {
     POST,
 }
 
-struct TelegramRequest<F, B>
-where
-    F: Serialize + Sized,
-    B: Serialize + Sized,
-{
-    method: Method,
-    route: String,
-    form: Option<F>,
-    body: Option<B>,
+struct TelegramRequest {
+    builder: RequestBuilder,
     bot: Bot,
 }
 
-impl<F, B> TelegramRequest<F, B>
-where
-    F: Serialize + Sized,
-    B: Serialize + Sized,
-{
-    fn execute<O>(self) -> impl Future<Item = (Bot, O), Error = APIError>
-    where
-        O: DeserializeOwned + std::fmt::Debug,
-    {
-        let client = &self.bot.connection.client;
+impl TelegramRequest {
+    fn new(method: Method, route: String, bot: Bot) -> Self {
+        let client = &bot.connection.client;
 
-        let mut request = match self.method {
-            Method::GET => client.get(&self.route),
-            Method::POST => client.post(&self.route),
+        let request = match method {
+            Method::GET => client.get(&route),
+            Method::POST => client.post(&route),
         };
 
-        if self.form.is_some() {
-            request = request.form(&self.form);
+        TelegramRequest {
+            builder: request,
+            bot,
         }
+    }
 
-        if self.body.is_some() {
-            request = request.json(&self.body);
-        }
+    fn with_body<B: Serialize + Sized>(mut self, body_data: B) -> Self {
+        self.builder = self.builder.json(&body_data);
 
-        request
+        self
+    }
+
+    fn with_form<F: Serialize + Sized>(mut self, form_data: F) -> Self {
+        self.builder = self.builder.form(&form_data);
+
+        self
+    }
+
+    fn with_multipart(mut self, form: Form) -> Self {
+        self.builder = self.builder.multipart(form);
+
+        self
+    }
+
+    fn execute<O: DeserializeOwned + std::fmt::Debug>(
+        self,
+    ) -> impl Future<Item = (Bot, O), Error = APIError> {
+        let bot = self.bot;
+
+        self.builder
             .send()
             .and_then(|mut response: Response| response.json())
             .map_err(|err| err.into())
             .and_then(|api_response: APIResponse<O>| api_response.as_result())
-            .map(|data| (self.bot, data))
+            .map(move |data| (bot, data))
     }
 }
 
-type Map = HashMap<String, String>;
-
 impl Bot {
     pub fn get_me(self) -> impl Future<Item = (Self, User), Error = APIError> {
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"getMe"),
-            form: None::<Map>,
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"getMe"), self).execute()
     }
 
     pub fn get_updates(
         self,
-        input_data: GetUpdateArgs,
+        get_updates: GetUpdateArgs,
     ) -> impl Future<Item = (Self, Vec<Update>), Error = APIError> {
-        TelegramRequest {
-            method: Method::POST,
-            route: self.get_route(&"getUpdates"),
-            form: None::<Map>,
-            body: Some(input_data),
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::POST, self.get_route(&"getUpdates"), self)
+            .with_body(get_updates)
+            .execute()
     }
 
     pub fn send_message(
         self,
-        input_data: SendMessage,
+        send_message: SendMessage,
     ) -> impl Future<Item = (Self, Message), Error = APIError> {
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"sendMessage"),
-            form: Some(input_data),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"sendMessage"), self)
+            .with_form(send_message)
+            .execute()
     }
 
     pub fn get_chat<ID>(self, id: ID) -> impl Future<Item = (Self, Chat), Error = APIError>
@@ -105,14 +95,9 @@ impl Bot {
     {
         let get_chat = GetChat::new(id.into());
 
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"getChat"),
-            form: Some(get_chat),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"getChat"), self)
+            .with_form(get_chat)
+            .execute()
     }
 
     pub fn set_chat_title<ID>(
@@ -125,14 +110,9 @@ impl Bot {
     {
         let set_chat_title = SetChatTitle::new(id.into(), title);
 
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"setChatTitle"),
-            form: Some(set_chat_title),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"setChatTitle"), self)
+            .with_form(set_chat_title)
+            .execute()
     }
 
     pub fn set_chat_description<ID>(
@@ -145,14 +125,9 @@ impl Bot {
     {
         let set_chat_description = SetChatDescription::new(id.into(), description);
 
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"setChatDescription"),
-            form: Some(set_chat_description),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"setChatDescription"), self)
+            .with_form(set_chat_description)
+            .execute()
     }
 
     pub fn pin_message<ID>(
@@ -166,42 +141,27 @@ impl Bot {
     {
         let pin_message = PinMessage::new(id.into(), message_id, disable_notification);
 
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"pinChatMessage"),
-            form: Some(pin_message),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"pinChatMessage"), self)
+            .with_form(pin_message)
+            .execute()
     }
 
     pub fn unpin_message<ID>(self, id: ID) -> impl Future<Item = (Self, bool), Error = APIError>
     where
         ID: Into<ChatID>,
     {
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"unpinChatMessage"),
-            form: Some(id.into()),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"unpinChatMessage"), self)
+            .with_form(id.into())
+            .execute()
     }
 
     pub fn leave_chat<ID>(self, id: ID) -> impl Future<Item = (Self, bool), Error = APIError>
     where
         ID: Into<ChatID>,
     {
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"leaveChat"),
-            form: Some(id.into()),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"leaveChat"), self)
+            .with_form(id.into())
+            .execute()
     }
 
     pub fn get_chat_members_count<ID>(
@@ -211,56 +171,36 @@ impl Bot {
     where
         ID: Into<ChatID>,
     {
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"getChatMembersCount"),
-            form: Some(id.into()),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"getChatMembersCount"), self)
+            .with_form(id.into())
+            .execute()
     }
 
     pub fn send_location(
         self,
         send_location: SendLocation,
     ) -> impl Future<Item = (Self, Message), Error = APIError> {
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"sendLocation"),
-            form: Some(send_location),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"sendLocation"), self)
+            .with_form(send_location)
+            .execute()
     }
 
     pub fn get_file(
         self,
         file_id: String,
     ) -> impl Future<Item = (Self, FileInfo), Error = APIError> {
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"getFile"),
-            form: Some(GetFile::new(file_id)),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"getFile"), self)
+            .with_form(GetFile::new(file_id))
+            .execute()
     }
 
     pub fn send_contact(
         self,
         send_contact: SendContact,
     ) -> impl Future<Item = (Self, Message), Error = APIError> {
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"sendContact"),
-            form: Some(send_contact),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"sendContact"), self)
+            .with_form(send_contact)
+            .execute()
     }
 
     pub fn get_chat_admins<ID>(
@@ -270,14 +210,9 @@ impl Bot {
     where
         ID: Into<ChatID>,
     {
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"getChatAdministrators"),
-            form: Some(chat_id.into()),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"getChatAdministrators"), self)
+            .with_form(chat_id.into())
+            .execute()
     }
 
     pub fn get_chat_member<ID>(
@@ -293,14 +228,9 @@ impl Bot {
             chat_id: chat_id.into(),
         };
 
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"getChatMember"),
-            form: Some(get_chat_member),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"getChatMember"), self)
+            .with_form(get_chat_member)
+            .execute()
     }
 
     /// Set sticker set for a group or chat.
@@ -320,14 +250,9 @@ impl Bot {
             chat_id: chat_id.into(),
         };
 
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"setChatStickerSet"),
-            form: Some(set_chat_sticker_set),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"setChatStickerSet"), self)
+            .with_form(set_chat_sticker_set)
+            .execute()
     }
 
     /// Delete sticker set for a group or chat.
@@ -340,14 +265,9 @@ impl Bot {
     where
         ID: Into<ChatID>,
     {
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"deleteChatStickerSet"),
-            form: Some(chat_id.into()),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"deleteChatStickerSet"), self)
+            .with_form(chat_id.into())
+            .execute()
     }
 
     /// Promote a chat member.
@@ -365,28 +285,18 @@ impl Bot {
         self,
         promote_member: PromoteChatMember,
     ) -> impl Future<Item = (Self, bool), Error = APIError> {
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"promoteChatMember"),
-            form: Some(promote_member),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"promoteChatMember"), self)
+            .with_form(promote_member)
+            .execute()
     }
 
     pub fn restrict_chat_member(
         self,
         restrict_member: RestrictChatMember,
     ) -> impl Future<Item = (Self, bool), Error = APIError> {
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"restrictChatMember"),
-            form: Some(restrict_member),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"restrictChatMember"), self)
+            .with_form(restrict_member)
+            .execute()
     }
 
     pub fn delete_chat_photo<ID>(
@@ -396,13 +306,8 @@ impl Bot {
     where
         ID: Into<ChatID>,
     {
-        TelegramRequest {
-            method: Method::GET,
-            route: self.get_route(&"deleteChatPhoto"),
-            form: Some(chat_id.into()),
-            body: None::<Map>,
-            bot: self,
-        }
-        .execute()
+        TelegramRequest::new(Method::GET, self.get_route(&"deleteChatPhoto"), self)
+            .with_form(chat_id.into())
+            .execute()
     }
 }
