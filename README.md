@@ -49,7 +49,7 @@ There are some methods implemented and others in need of an implementation, here
 - [x] getChat
 - [x] getChatAdministrators
 - [x] getChatMembersCount
-- [ ] getChatMember
+- [x] getChatMember
 - [ ] setChatStickerSet
 - [ ] deleteChatStickerSet
 - [ ] answerCallbackQuery

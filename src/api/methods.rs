@@ -279,4 +279,27 @@ impl Bot {
         }
         .execute()
     }
+
+    pub fn get_chat_member<ID>(
+        self,
+        chat_id: ID,
+        user_id: i64,
+    ) -> impl Future<Item = (Self, ChatMember), Error = APIError>
+    where
+        ID: Into<ChatID>,
+    {
+        let get_chat_member = GetChatMember {
+            user_id,
+            chat_id: chat_id.into(),
+        };
+
+        TelegramRequest {
+            method: Method::GET,
+            route: self.get_route(&"getChatMember"),
+            form: Some(get_chat_member),
+            body: None::<Map>,
+            bot: self,
+        }
+        .execute()
+    }
 }
