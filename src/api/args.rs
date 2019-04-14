@@ -329,6 +329,7 @@ impl GetFile {
 
 #[derive(Default, Debug, Serialize)]
 pub struct SendContact {
+    #[serde(flatten)]
     pub chat_id: ChatID,
     pub phone_number: String,
     pub first_name: String,
