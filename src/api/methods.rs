@@ -388,4 +388,21 @@ impl Bot {
         }
         .execute()
     }
+
+    pub fn delete_chat_photo<ID>(
+        self,
+        chat_id: ID,
+    ) -> impl Future<Item = (Self, bool), Error = APIError>
+    where
+        ID: Into<ChatID>,
+    {
+        TelegramRequest {
+            method: Method::GET,
+            route: self.get_route(&"deleteChatPhoto"),
+            form: Some(chat_id.into()),
+            body: None::<Map>,
+            bot: self,
+        }
+        .execute()
+    }
 }

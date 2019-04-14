@@ -40,7 +40,7 @@ There are some methods implemented and others in need of an implementation, here
 - [x] promoteChatMember
 - [ ] exportChatInviteLink
 - [ ] setChatPhoto
-- [ ] deleteChatPhoto
+- [x] deleteChatPhoto
 - [x] setChatTitle
 - [x] setChatDescription
 - [x] pinChatMessage
