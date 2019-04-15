@@ -89,10 +89,10 @@ impl Bot {
             .execute()
     }
 
-    pub fn get_chat<ID>(self, id: ID) -> impl Future<Item = (Self, Chat), Error = APIError>
-    where
-        ID: Into<ChatID>,
-    {
+    pub fn get_chat<ID: Into<ChatID>>(
+        self,
+        id: ID,
+    ) -> impl Future<Item = (Self, Chat), Error = APIError> {
         let get_chat = GetChat::new(id.into());
 
         TelegramRequest::new(Method::GET, self.get_route(&"getChat"), self)
@@ -100,14 +100,11 @@ impl Bot {
             .execute()
     }
 
-    pub fn set_chat_title<ID>(
+    pub fn set_chat_title<ID: Into<ChatID>>(
         self,
         id: ID,
         title: String,
-    ) -> impl Future<Item = (Self, bool), Error = APIError>
-    where
-        ID: Into<ChatID>,
-    {
+    ) -> impl Future<Item = (Self, bool), Error = APIError> {
         let set_chat_title = SetChatTitle::new(id.into(), title);
 
         TelegramRequest::new(Method::GET, self.get_route(&"setChatTitle"), self)
@@ -115,14 +112,11 @@ impl Bot {
             .execute()
     }
 
-    pub fn set_chat_description<ID>(
+    pub fn set_chat_description<ID: Into<ChatID>>(
         self,
         id: ID,
         description: String,
-    ) -> impl Future<Item = (Self, bool), Error = APIError>
-    where
-        ID: Into<ChatID>,
-    {
+    ) -> impl Future<Item = (Self, bool), Error = APIError> {
         let set_chat_description = SetChatDescription::new(id.into(), description);
 
         TelegramRequest::new(Method::GET, self.get_route(&"setChatDescription"), self)
@@ -130,15 +124,12 @@ impl Bot {
             .execute()
     }
 
-    pub fn pin_message<ID>(
+    pub fn pin_message<ID: Into<ChatID>>(
         self,
         id: ID,
         message_id: i64,
         disable_notification: bool,
-    ) -> impl Future<Item = (Self, bool), Error = APIError>
-    where
-        ID: Into<ChatID>,
-    {
+    ) -> impl Future<Item = (Self, bool), Error = APIError> {
         let pin_message = PinMessage::new(id.into(), message_id, disable_notification);
 
         TelegramRequest::new(Method::GET, self.get_route(&"pinChatMessage"), self)
@@ -146,31 +137,28 @@ impl Bot {
             .execute()
     }
 
-    pub fn unpin_message<ID>(self, id: ID) -> impl Future<Item = (Self, bool), Error = APIError>
-    where
-        ID: Into<ChatID>,
-    {
+    pub fn unpin_message<ID: Into<ChatID>>(
+        self,
+        id: ID,
+    ) -> impl Future<Item = (Self, bool), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"unpinChatMessage"), self)
             .with_form(id.into())
             .execute()
     }
 
-    pub fn leave_chat<ID>(self, id: ID) -> impl Future<Item = (Self, bool), Error = APIError>
-    where
-        ID: Into<ChatID>,
-    {
+    pub fn leave_chat<ID: Into<ChatID>>(
+        self,
+        id: ID,
+    ) -> impl Future<Item = (Self, bool), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"leaveChat"), self)
             .with_form(id.into())
             .execute()
     }
 
-    pub fn get_chat_members_count<ID>(
+    pub fn get_chat_members_count<ID: Into<ChatID>>(
         self,
         id: ID,
-    ) -> impl Future<Item = (Self, u64), Error = APIError>
-    where
-        ID: Into<ChatID>,
-    {
+    ) -> impl Future<Item = (Self, u64), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"getChatMembersCount"), self)
             .with_form(id.into())
             .execute()
@@ -203,13 +191,10 @@ impl Bot {
             .execute()
     }
 
-    pub fn get_chat_admins<ID>(
+    pub fn get_chat_admins<ID: Into<ChatID>>(
         self,
         chat_id: ID,
-    ) -> impl Future<Item = (Self, Vec<ChatMember>), Error = APIError>
-    where
-        ID: Into<ChatID>,
-    {
+    ) -> impl Future<Item = (Self, Vec<ChatMember>), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"getChatAdministrators"), self)
             .with_form(chat_id.into())
             .execute()
@@ -237,14 +222,11 @@ impl Bot {
     ///
     /// Will only work for groups of at least
     /// 100 members.
-    pub fn set_chat_sticker_set<ID>(
+    pub fn set_chat_sticker_set<ID: Into<ChatID>>(
         self,
         chat_id: ID,
         sticker_set: &str,
-    ) -> impl Future<Item = (Self, bool), Error = APIError>
-    where
-        ID: Into<ChatID>,
-    {
+    ) -> impl Future<Item = (Self, bool), Error = APIError> {
         let set_chat_sticker_set = SetChatStickerSet {
             sticker_set_name: sticker_set.to_string(),
             chat_id: chat_id.into(),
@@ -258,13 +240,10 @@ impl Bot {
     /// Delete sticker set for a group or chat.
     ///
     /// Will only work if there is a sticker set defined.
-    pub fn delete_chat_sticker_set<ID>(
+    pub fn delete_chat_sticker_set<ID: Into<ChatID>>(
         self,
         chat_id: ID,
-    ) -> impl Future<Item = (Self, bool), Error = APIError>
-    where
-        ID: Into<ChatID>,
-    {
+    ) -> impl Future<Item = (Self, bool), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"deleteChatStickerSet"), self)
             .with_form(chat_id.into())
             .execute()
@@ -299,13 +278,10 @@ impl Bot {
             .execute()
     }
 
-    pub fn delete_chat_photo<ID>(
+    pub fn delete_chat_photo<ID: Into<ChatID>>(
         self,
         chat_id: ID,
-    ) -> impl Future<Item = (Self, bool), Error = APIError>
-    where
-        ID: Into<ChatID>,
-    {
+    ) -> impl Future<Item = (Self, bool), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"deleteChatPhoto"), self)
             .with_form(chat_id.into())
             .execute()
