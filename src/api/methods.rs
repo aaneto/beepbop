@@ -38,8 +38,6 @@ impl TelegramRequest {
         self
     }
 
-    fn with_form<F: Serialize + Sized>(mut self, form_data: F) -> Self {
-        self.builder = self.builder.form(&form_data);
 
         self
     }
