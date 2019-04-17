@@ -2,11 +2,11 @@ use std::path::PathBuf;
 
 use serde_derive::Serialize;
 
-use crate::util::FileUploaderError;
 use crate::util::FileUploader;
+use crate::util::FileUploaderError;
+use crate::util::IdUploader;
 use crate::util::PostUploader;
 use crate::util::UrlUploader;
-use crate::util::IdUploader;
 
 #[derive(Debug, Serialize)]
 pub struct GetUpdateArgs {
@@ -476,11 +476,13 @@ impl SendPhoto<IdUploader> {
 }
 
 impl SendPhoto<PostUploader> {
-    pub fn from_post<ID: Into<ChatID>>(chat_id: ID, file_path: PathBuf, mime_string: &str,) -> Result<Self, FileUploaderError> {
+    pub fn from_post<ID: Into<ChatID>>(
+        chat_id: ID,
+        file_path: PathBuf,
+        mime_string: &str,
+    ) -> Result<Self, FileUploaderError> {
         let uploader_result = PostUploader::new(file_path, "photo", mime_string);
 
-        uploader_result.map(|uploader| {
-            SendPhoto::new(chat_id, uploader)
-        })
+        uploader_result.map(|uploader| SendPhoto::new(chat_id, uploader))
     }
 }
