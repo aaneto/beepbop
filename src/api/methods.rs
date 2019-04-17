@@ -284,7 +284,6 @@ impl Bot {
         chat_id: ID,
     ) -> impl Future<Item = (Self, bool), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"deleteChatPhoto"), self)
-            .with_form(chat_id.into())
             .with_query(chat_id.into())
             .execute()
     }
