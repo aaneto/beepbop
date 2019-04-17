@@ -83,7 +83,7 @@ impl Bot {
         send_message: SendMessage,
     ) -> impl Future<Item = (Self, Message), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"sendMessage"), self)
-            .with_form(send_message)
+            .with_query(send_message)
             .execute()
     }
 
@@ -94,7 +94,7 @@ impl Bot {
         let get_chat = GetChat::new(id.into());
 
         TelegramRequest::new(Method::GET, self.get_route(&"getChat"), self)
-            .with_form(get_chat)
+            .with_query(get_chat)
             .execute()
     }
 
@@ -106,7 +106,7 @@ impl Bot {
         let set_chat_title = SetChatTitle::new(id.into(), title);
 
         TelegramRequest::new(Method::GET, self.get_route(&"setChatTitle"), self)
-            .with_form(set_chat_title)
+            .with_query(set_chat_title)
             .execute()
     }
 
@@ -118,7 +118,7 @@ impl Bot {
         let set_chat_description = SetChatDescription::new(id.into(), description);
 
         TelegramRequest::new(Method::GET, self.get_route(&"setChatDescription"), self)
-            .with_form(set_chat_description)
+            .with_query(set_chat_description)
             .execute()
     }
 
@@ -131,7 +131,7 @@ impl Bot {
         let pin_message = PinMessage::new(id.into(), message_id, disable_notification);
 
         TelegramRequest::new(Method::GET, self.get_route(&"pinChatMessage"), self)
-            .with_form(pin_message)
+            .with_query(pin_message)
             .execute()
     }
 
@@ -140,7 +140,7 @@ impl Bot {
         id: ID,
     ) -> impl Future<Item = (Self, bool), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"unpinChatMessage"), self)
-            .with_form(id.into())
+            .with_query(id.into())
             .execute()
     }
 
@@ -149,7 +149,7 @@ impl Bot {
         id: ID,
     ) -> impl Future<Item = (Self, bool), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"leaveChat"), self)
-            .with_form(id.into())
+            .with_query(id.into())
             .execute()
     }
 
@@ -158,7 +158,7 @@ impl Bot {
         id: ID,
     ) -> impl Future<Item = (Self, u64), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"getChatMembersCount"), self)
-            .with_form(id.into())
+            .with_query(id.into())
             .execute()
     }
 
@@ -167,7 +167,7 @@ impl Bot {
         send_location: SendLocation,
     ) -> impl Future<Item = (Self, Message), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"sendLocation"), self)
-            .with_form(send_location)
+            .with_query(send_location)
             .execute()
     }
 
@@ -176,7 +176,7 @@ impl Bot {
         file_id: String,
     ) -> impl Future<Item = (Self, FileInfo), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"getFile"), self)
-            .with_form(GetFile::new(file_id))
+            .with_query(GetFile::new(file_id))
             .execute()
     }
 
@@ -185,7 +185,7 @@ impl Bot {
         send_contact: SendContact,
     ) -> impl Future<Item = (Self, Message), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"sendContact"), self)
-            .with_form(send_contact)
+            .with_query(send_contact)
             .execute()
     }
 
@@ -194,7 +194,7 @@ impl Bot {
         chat_id: ID,
     ) -> impl Future<Item = (Self, Vec<ChatMember>), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"getChatAdministrators"), self)
-            .with_form(chat_id.into())
+            .with_query(chat_id.into())
             .execute()
     }
 
@@ -212,7 +212,7 @@ impl Bot {
         };
 
         TelegramRequest::new(Method::GET, self.get_route(&"getChatMember"), self)
-            .with_form(get_chat_member)
+            .with_query(get_chat_member)
             .execute()
     }
 
@@ -231,7 +231,7 @@ impl Bot {
         };
 
         TelegramRequest::new(Method::GET, self.get_route(&"setChatStickerSet"), self)
-            .with_form(set_chat_sticker_set)
+            .with_query(set_chat_sticker_set)
             .execute()
     }
 
@@ -243,7 +243,7 @@ impl Bot {
         chat_id: ID,
     ) -> impl Future<Item = (Self, bool), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"deleteChatStickerSet"), self)
-            .with_form(chat_id.into())
+            .with_query(chat_id.into())
             .execute()
     }
 
@@ -263,7 +263,7 @@ impl Bot {
         promote_member: PromoteChatMember,
     ) -> impl Future<Item = (Self, bool), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"promoteChatMember"), self)
-            .with_form(promote_member)
+            .with_query(promote_member)
             .execute()
     }
 
@@ -272,7 +272,7 @@ impl Bot {
         restrict_member: RestrictChatMember,
     ) -> impl Future<Item = (Self, bool), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"restrictChatMember"), self)
-            .with_form(restrict_member)
+            .with_query(restrict_member)
             .execute()
     }
 
