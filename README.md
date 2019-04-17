@@ -39,7 +39,7 @@ There are some methods implemented and others in need of an implementation, here
 - [x] restrictChatMember
 - [x] promoteChatMember
 - [ ] exportChatInviteLink
-- [ ] setChatPhoto
+- [x] setChatPhoto
 - [x] deleteChatPhoto
 - [x] setChatTitle
 - [x] setChatDescription

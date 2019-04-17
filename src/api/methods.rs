@@ -285,6 +285,21 @@ impl Bot {
     ) -> impl Future<Item = (Self, bool), Error = APIError> {
         TelegramRequest::new(Method::GET, self.get_route(&"deleteChatPhoto"), self)
             .with_form(chat_id.into())
+            .with_query(chat_id.into())
+            .execute()
+    }
+
+    pub fn set_chat_photo<ID: Into<ChatID>>(
+        self,
+        chat_id: ID,
+        file_uploader: PostUploader,
+    ) -> impl Future<Item = (Self, bool), Error = APIError> {
+        TelegramRequest::new(Method::POST, self.get_route(&"setChatPhoto"), self)
+            .with_query(chat_id.into())
+            .with_uploader(file_uploader)
+            .execute()
+    }
+
             .execute()
     }
 }
