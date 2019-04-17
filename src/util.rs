@@ -61,6 +61,7 @@ pub trait FileUploader {
     fn upload_into(self, builder: TelegramRequest) -> TelegramRequest;
 }
 
+#[derive(Debug)]
 pub struct PostUploader {
     form: Form,
 }
@@ -100,6 +101,7 @@ impl FileUploader for PostUploader {
     }
 }
 
+#[derive(Debug)]
 pub struct IdUploader {
     tag: String,
     id: String,
@@ -120,6 +122,7 @@ impl FileUploader for IdUploader {
     }
 }
 
+#[derive(Debug)]
 pub struct UrlUploader {
     tag: String,
     url: String,
