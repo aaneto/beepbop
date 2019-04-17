@@ -18,7 +18,7 @@ There are some methods implemented and others in need of an implementation, here
 - [x] getUpdates
 - [x] sendMessage
 - [ ] forwardMessage
-- [ ] sendPhoto
+- [x] sendPhoto
 - [ ] sendAudio
 - [ ] sendDocument
 - [ ] sendVideo
