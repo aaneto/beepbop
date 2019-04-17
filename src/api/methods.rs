@@ -38,12 +38,12 @@ impl TelegramRequest {
         self
     }
 
+    fn with_multipart(mut self, form: Form) -> Self {
+        self.builder = self.builder.multipart(form);
 
         self
     }
 
-    fn with_multipart(mut self, form: Form) -> Self {
-        self.builder = self.builder.multipart(form);
     fn with_query<Q: Serialize + Sized>(mut self, query_data: Q) -> Self {
         self.builder = self.builder.query(&query_data);
 
