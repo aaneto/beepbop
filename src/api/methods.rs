@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
@@ -7,18 +6,18 @@ use reqwest::r#async::multipart::Form;
 use reqwest::r#async::RequestBuilder;
 use reqwest::r#async::Response;
 
-enum Method {
+pub enum Method {
     GET,
     POST,
 }
 
-struct TelegramRequest {
+pub struct TelegramRequest {
     builder: RequestBuilder,
     bot: Bot,
 }
 
 impl TelegramRequest {
-    fn new(method: Method, route: String, bot: Bot) -> Self {
+    pub fn new(method: Method, route: String, bot: Bot) -> Self {
         let client = &bot.connection.client;
 
         let request = match method {
@@ -32,25 +31,29 @@ impl TelegramRequest {
         }
     }
 
-    fn with_body<B: Serialize + Sized>(mut self, body_data: B) -> Self {
+    pub fn with_body<B: Serialize + Sized>(mut self, body_data: B) -> Self {
         self.builder = self.builder.json(&body_data);
 
         self
     }
 
-    fn with_multipart(mut self, form: Form) -> Self {
+    pub fn with_multipart(mut self, form: Form) -> Self {
         self.builder = self.builder.multipart(form);
 
         self
     }
 
-    fn with_query<Q: Serialize + Sized>(mut self, query_data: Q) -> Self {
+    pub fn with_query<Q: Serialize + Sized>(mut self, query_data: Q) -> Self {
         self.builder = self.builder.query(&query_data);
 
         self
     }
 
-    fn execute<O: DeserializeOwned + std::fmt::Debug>(
+    pub fn with_uploader<U: FileUploader>(self, file_uploader: U) -> Self {
+        file_uploader.upload_into(self)
+    }
+
+    pub fn execute<O: DeserializeOwned + std::fmt::Debug>(
         self,
     ) -> impl Future<Item = (Bot, O), Error = APIError> {
         let bot = self.bot;
