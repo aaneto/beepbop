@@ -1,11 +1,6 @@
 use serde_derive::Serialize;
 
-use crate::api::args::{
-    ForceReply,
-    ReplyKeboardMarkup,
-    ReplyKeboardRemove,
-    InlineKeyboardMarkup
-};
+use crate::api::args::{ForceReply, InlineKeyboardMarkup, ReplyKeboardMarkup, ReplyKeboardRemove};
 
 #[derive(Debug, Serialize)]
 #[serde(untagged)]
