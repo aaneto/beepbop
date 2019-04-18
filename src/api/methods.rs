@@ -74,7 +74,7 @@ impl Bot {
 
     pub fn get_updates(
         self,
-        get_updates: GetUpdateArgs,
+        get_updates: GetUpdates,
     ) -> impl Future<Item = (Self, Vec<Update>), Error = APIError> {
         TelegramRequest::new(Method::POST, self.get_route(&"getUpdates"), self)
             .with_body(get_updates)
