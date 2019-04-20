@@ -101,14 +101,14 @@ where
 impl<T: std::fmt::Debug> Into<APIResult<T>> for APIResponse<T> {
     fn into(self) -> APIResult<T> {
         if self.ok {
-            Ok(self.result.expect("Ok response without data."))
+            Ok(self.result.expect("Ok response must have data."))
         } else {
             let mut error_message = String::new();
-            error_message.push_str(&"Telegram is not ok. \n");
+            error_message.push_str(&"Telegram(");
 
             if let Some(error_code) = self.error_code.as_ref() {
                 error_message.push_str(&error_code.to_string());
-                error_message.push_str(&": ");
+                error_message.push_str(&"): ");
             }
 
             if let Some(description) = self.description.as_ref() {
