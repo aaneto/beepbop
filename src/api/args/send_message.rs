@@ -2,7 +2,6 @@ use optional_builder::optional_builder;
 use serde_derive::Serialize;
 
 use crate::api::args::ChatID;
-use crate::api::args::ForceReply;
 use crate::api::args::ReplyMarkup;
 
 #[optional_builder]
