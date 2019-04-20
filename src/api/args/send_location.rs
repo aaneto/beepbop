@@ -1,14 +1,18 @@
+use optional_builder::optional_builder;
+
 use serde_derive::Serialize;
 
 use crate::api::args::ChatID;
 use crate::api::args::ReplyMarkup;
 
-#[derive(Debug, Serialize)]
+#[optional_builder]
+#[derive(Clone, Debug, Serialize)]
 pub struct SendLocation {
     #[serde(flatten)]
     pub chat_id: ChatID,
     pub latitude: f64,
     pub longitude: f64,
+    #[optional_builder(skip)]
     pub live_period: Option<u32>,
     pub disable_notification: Option<bool>,
     pub reply_to_message_id: Option<i64>,
@@ -37,6 +41,12 @@ impl SendLocation {
         } else {
             self.live_period = Some(live_period);
         }
+
+        self
+    }
+
+    pub fn without_live_period(mut self) -> Self {
+        self.live_period = None;
 
         self
     }

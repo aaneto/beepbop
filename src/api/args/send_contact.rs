@@ -1,8 +1,11 @@
+use optional_builder::optional_builder;
+
 use serde_derive::Serialize;
 
 use crate::api::args::ChatID;
 use crate::api::args::ReplyMarkup;
 
+#[optional_builder]
 #[derive(Default, Debug, Serialize)]
 pub struct SendContact {
     #[serde(flatten)]

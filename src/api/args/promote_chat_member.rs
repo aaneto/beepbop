@@ -1,7 +1,10 @@
+use optional_builder::optional_builder;
+
 use serde_derive::Serialize;
 
 use crate::api::args::ChatID;
 
+#[optional_builder]
 #[derive(Default, Debug, Serialize)]
 pub struct PromoteChatMember {
     #[serde(flatten)]

@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use optional_builder::optional_builder;
 use serde_derive::Serialize;
 
 use crate::util::FileUploader;
@@ -13,6 +14,9 @@ use crate::api::args::ReplyMarkup;
 
 #[derive(Default, Debug, Serialize)]
 pub struct SendPhotoArgs {
+#[optional_builder]
+#[derive(Default, Clone, Debug, Serialize)]
+pub struct SendPhoto {
     #[serde(flatten)]
     pub chat_id: ChatID,
     pub caption: Option<String>,
