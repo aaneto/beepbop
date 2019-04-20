@@ -1,6 +1,6 @@
 use serde_derive::Serialize;
 
-#[derive(Debug, Serialize)]
+#[derive(Clone, Debug, Serialize)]
 pub struct ReplyKeboardRemove {
     pub remove_keyboard: bool,
     pub selective: bool,

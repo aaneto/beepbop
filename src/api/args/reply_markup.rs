@@ -2,7 +2,7 @@ use serde_derive::Serialize;
 
 use crate::api::args::{ForceReply, InlineKeyboardMarkup, ReplyKeboardMarkup, ReplyKeboardRemove};
 
-#[derive(Debug, Serialize)]
+#[derive(Clone, Debug, Serialize)]
 #[serde(untagged)]
 pub enum ReplyMarkup {
     ForceReply(ForceReply),

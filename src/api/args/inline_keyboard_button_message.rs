@@ -1,6 +1,6 @@
 use serde_derive::Serialize;
 
-#[derive(Debug, Serialize)]
+#[derive(Clone, Debug, Serialize)]
 pub enum InlineKeyboardButtonMessage {
     #[serde(rename = "url")]
     Url(String),
