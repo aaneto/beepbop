@@ -21,13 +21,17 @@ impl From<i64> for ChatID {
 
 impl From<i32> for ChatID {
     fn from(id: i32) -> Self {
-        ChatID::Integer { chat_id: id as i64 }
+        ChatID::Integer {
+            chat_id: i64::from(id),
+        }
     }
 }
 
 impl From<u32> for ChatID {
     fn from(id: u32) -> Self {
-        ChatID::Integer { chat_id: id as i64 }
+        ChatID::Integer {
+            chat_id: i64::from(id),
+        }
     }
 }
 
