@@ -14,9 +14,7 @@ impl From<reqwest::Error> for APIError {
 }
 
 impl Into<()> for APIError {
-    fn into(self) -> () {
-        ()
-    }
+    fn into(self) {}
 }
 
 impl std::fmt::Display for APIError {
