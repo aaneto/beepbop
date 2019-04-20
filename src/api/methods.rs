@@ -61,9 +61,13 @@ impl TelegramRequest {
         self.builder
             .send()
             .and_then(|mut response: Response| response.json())
-            .map_err(|err| err.into())
-            .and_then(|api_response: APIResponse<O>| api_response.as_result())
-            .map(move |data| (bot, data))
+            .map_err(APIError::from)
+            .and_then(|api_response: APIResponse<O>| {
+                let api_result: APIResult<O> = api_response.into();
+
+                api_result
+            })
+            .map(move |data: O| (bot, data))
     }
 }
 

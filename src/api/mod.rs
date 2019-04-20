@@ -98,25 +98,22 @@ where
     result: Option<T>,
 }
 
-impl<T> APIResponse<T>
-where
-    T: std::fmt::Debug,
-{
-    pub fn as_result(self) -> APIResult<T> {
+impl<T: std::fmt::Debug> Into<APIResult<T>> for APIResponse<T> {
+    fn into(self) -> APIResult<T> {
         if self.ok {
             Ok(self.result.expect("Ok response without data."))
         } else {
             let mut error_message = String::new();
             error_message.push_str(&"Telegram is not ok. \n");
 
-            self.error_code.as_ref().map(|error_code| {
+            if let Some(error_code) = self.error_code.as_ref() {
                 error_message.push_str(&error_code.to_string());
                 error_message.push_str(&": ");
-            });
+            }
 
-            self.description.as_ref().map(|description| {
+            if let Some(description) = self.description.as_ref() {
                 error_message.push_str(description);
-            });
+            }
 
             Err(APIError::TelegramError(error_message))
         }
