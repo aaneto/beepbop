@@ -12,15 +12,4 @@ impl GetChat {
     pub fn new(chat_id: ChatID) -> Self {
         Self { chat_id }
     }
-    pub fn from_integer(id: i64) -> Self {
-        Self {
-            chat_id: ChatID::Integer { chat_id: id },
-        }
-    }
-
-    pub fn from_string(id: String) -> Self {
-        Self {
-            chat_id: ChatID::String { chat_id: id },
-        }
-    }
 }
