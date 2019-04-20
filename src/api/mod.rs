@@ -64,9 +64,9 @@ impl Bot {
 
     #[inline]
     fn compose_url(&self, mut base: String, extra: &str) -> String {
-        base.extend(self.connection.api_key.chars());
+        base.push_str(&self.connection.api_key);
         base.push('/');
-        base.extend(extra.chars());
+        base.push_str(extra);
 
         base
     }
