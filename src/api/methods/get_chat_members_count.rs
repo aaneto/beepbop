@@ -3,9 +3,9 @@ use futures::Future;
 use crate::api::Bot;
 use crate::api::args::ChatID;
 use crate::api::error::APIError;
-use crate::api::methods::Method;
+use crate::api::Method;
+use crate::api::TelegramRequest;
 use crate::api::args::SetChatDescription;
-use crate::api::methods::TelegramRequest;
 
 impl Bot {
     pub fn get_chat_members_count<ID: Into<ChatID>>(

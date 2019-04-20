@@ -3,9 +3,9 @@ use futures::Future;
 use crate::api::args::ChatID;
 use crate::api::args::SetChatStickerSet;
 use crate::api::error::APIError;
-use crate::api::methods::Method;
-use crate::api::methods::TelegramRequest;
 use crate::api::Bot;
+use crate::api::Method;
+use crate::api::TelegramRequest;
 
 impl Bot {
     /// Set sticker set for a group or chat.

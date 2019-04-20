@@ -1,6 +1,6 @@
-use crate::api::methods::TelegramRequest;
 use crate::api::uploaders::IdPostUploader;
 use crate::api::uploaders::Uploader;
+use crate::api::TelegramRequest;
 
 #[derive(Debug)]
 pub struct IdUploader {

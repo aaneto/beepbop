@@ -3,10 +3,10 @@ use futures::Future;
 use crate::api::args::SendPhoto;
 use crate::api::datatypes::Message;
 use crate::api::error::APIError;
-use crate::api::methods::Method;
-use crate::api::methods::TelegramRequest;
 use crate::api::uploaders::Uploader;
 use crate::api::Bot;
+use crate::api::Method;
+use crate::api::TelegramRequest;
 
 impl Bot {
     /// Send a photo in telegram.

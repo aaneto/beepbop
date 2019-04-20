@@ -2,7 +2,11 @@ pub mod args;
 pub mod datatypes;
 pub mod error;
 pub mod methods;
+pub mod telegram_request;
 pub mod uploaders;
+
+pub use telegram_request::Method;
+pub use telegram_request::TelegramRequest;
 
 use std::sync::Arc;
 

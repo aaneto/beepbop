@@ -4,10 +4,10 @@ use futures::future::Future;
 use reqwest::r#async::multipart::Form;
 use reqwest::r#async::multipart::Part;
 
-use crate::api::methods::TelegramRequest;
 use crate::api::uploaders::IdPostUploader;
 use crate::api::uploaders::Uploader;
 use crate::api::uploaders::UploaderError;
+use crate::api::TelegramRequest;
 
 #[derive(Debug)]
 pub struct FileUploader {

@@ -1,4 +1,4 @@
-use crate::api::methods::TelegramRequest;
+use crate::api::TelegramRequest;
 use std::error::Error;
 
 #[derive(Debug)]
