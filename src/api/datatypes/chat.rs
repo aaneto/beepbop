@@ -15,7 +15,7 @@ pub struct Chat {
     pub photo: Option<ChatPhoto>,
     pub description: Option<String>,
     pub invite_link: Option<String>,
-    pub pinned_message: Option<RawMessage>,
+    pub pinned_message: Option<Box<RawMessage>>,
     pub sticker_set_name: Option<String>,
     pub can_set_sticker_set: Option<bool>,
 }

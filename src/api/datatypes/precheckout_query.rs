@@ -11,5 +11,5 @@ pub struct PrecheckoutQuery {
     pub total_amount: u64,
     pub invoice_payload: String,
     pub shipping_option_id: String,
-    pub order_info: OrderInfo,
+    pub order_info: Box<OrderInfo>,
 }

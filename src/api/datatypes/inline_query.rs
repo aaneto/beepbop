@@ -6,7 +6,7 @@ use crate::api::datatypes::User;
 #[derive(Debug, Deserialize)]
 pub struct InlineQuery {
     pub id: String,
-    pub from: User,
+    pub from: Box<User>,
     pub location: Option<Location>,
     pub query: String,
     pub offset: String,

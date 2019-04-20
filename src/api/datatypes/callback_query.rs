@@ -7,7 +7,7 @@ use crate::api::datatypes::User;
 pub struct CallbackQuery {
     pub id: String,
     pub from: User,
-    pub message: Option<Message>,
+    pub message: Option<Box<Message>>,
     pub inline_message_id: Option<String>,
     pub chat_instance: String,
     pub data: Option<String>,
