@@ -213,10 +213,7 @@ impl Bot {
     where
         ID: Into<ChatID>,
     {
-        let get_chat_member = GetChatMember {
-            user_id,
-            chat_id: chat_id.into(),
-        };
+        let get_chat_member = GetChatMember::new(chat_id.into(), user_id);
 
         TelegramRequest::new(Method::GET, self.get_route(&"getChatMember"), self)
             .with_query(get_chat_member)
