@@ -59,13 +59,17 @@ mod tests {
                 .photo
                 .expect("Chat must have a photo for this test")
                 .big_file_id;
-            let send_photo = SendPhoto::from_id(chat_id, &file_id);
 
-            bot.send_photo(send_photo)
+            let id_uploader = IdUploader::new(&file_id);
+            let send_photo = SendPhoto::new(chat_id);
+
+            bot.send_photo(send_photo, id_uploader)
         });
 
-        if let Ok(_) = runtime.block_on(future) {
-            panic!("It should not be possible to resend a ChatPhoto by file_id.");
+        match runtime.block_on(future) {
+            Ok(_) => panic!("It should not be possible to resend a ChatPhoto by file_id."),
+            Err(APIError::TelegramError(_)) => {}
+            _ => panic!("Expected error is TelegramError."),
         }
     }
 
