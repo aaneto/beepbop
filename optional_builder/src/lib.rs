@@ -5,16 +5,16 @@ use std::iter::FromIterator;
 use quote::quote;
 use quote::ToTokens;
 
-use syn::Data;
-use syn::Fields;
-use syn::DeriveInput;
 use syn::parse_macro_input;
+use syn::Data;
+use syn::DeriveInput;
+use syn::Fields;
 
-use proc_macro2::Span;
 use proc_macro2::Group;
 use proc_macro2::Ident;
-use proc_macro2::TokenTree;
+use proc_macro2::Span;
 use proc_macro2::TokenStream;
+use proc_macro2::TokenTree;
 
 /// Search TokenStream for #[optional_builder(skip)]
 /// Or {
@@ -25,73 +25,68 @@ use proc_macro2::TokenStream;
 ///     }
 /// }
 fn has_skip_attr(stream: &TokenStream) -> bool {
-    let mut found_attr_header = false;
+    let mut tokens: Vec<TokenTree> = stream.clone().into_iter().take(2).collect();
 
-    for item in stream.clone().into_iter() {
-        if let TokenTree::Ident(ref ident) = item {
-            if ident == &Ident::new("optional_builder", ident.span()) {
-                found_attr_header = true;
-            }
-        }
-
-        if let TokenTree::Group(ref group) = item {
-            for group_item in group.clone().stream() {
-                if let TokenTree::Ident(ref ident) = group_item {
-                    if ident == &Ident::new("skip", ident.span()) {
-                        return found_attr_header;
-                    }
-                }
-            }
-        }
+    if tokens.len() < 2 {
+        return false;
     }
 
-    false
+    let group = tokens.remove(1);
+    let ident = tokens.remove(0);
+
+    if let (TokenTree::Ident(ident), TokenTree::Group(group)) = (ident, group) {
+        let is_optional_builder = ident == Ident::new("optional_builder", ident.span());
+        let mut is_skip_attr = false;
+
+        for group_item in group.stream() {
+            if let TokenTree::Ident(ref ident) = group_item {
+                if ident == &Ident::new("skip", ident.span()) {
+                    is_skip_attr = true;
+                }
+            }
+        }
+
+        is_optional_builder && is_skip_attr
+    } else {
+        false
+    }
 }
 
-/// Return the group with all inner groups that contains
-/// skip removed, and annotate the ident's contained after
+/// Consume a group and return a new group with all inner
+/// groups filtered to remove skip attributes, also register
+/// which fields should be ignored because of those attributes.
 fn group_remove_attr(fields_to_ignore: &mut Vec<Ident>, group: Group) -> Group {
-    let mut skip_list: Vec<usize> = Vec::new();
-    let mut ignore_list: Vec<usize> = Vec::new();
+    let mut tokens_whitelist: Vec<TokenTree> = Vec::new();
+    let mut to_skip = false;
 
-    // Mutable borrow of skip_list to detect
-    // attributes
-    let out_stream: Vec<(usize, TokenTree)> = group
-        .stream()
-        .into_iter()
-        .enumerate()
-        .inspect(|(i, token)| {
-            if let TokenTree::Group(ref grep) = token {
-                if has_skip_attr(&grep.stream()) {
-                    skip_list.push(*i);
-                    skip_list.push(*i - 1);
-                    ignore_list.push(*i + 1);
-                }
+    for token in group.stream() {
+        if let TokenTree::Group(ref inner_group) = token {
+            // Don't insert skipped attributes
+            if has_skip_attr(&inner_group.stream()) {
+                // Remove last (should be #)
+                tokens_whitelist.pop();
+                // next ident should be added to skiplist
+                to_skip = true;
+                // Do not add group
+                continue;
             }
-        })
-        .collect();
+        }
 
-    // Immutable borrow of skip_list to skip these
-    // elements on iterator.
-    let out_stream: Vec<TokenTree> = out_stream
-        .into_iter()
-        .filter(|(i, _)| !skip_list.clone().contains(i))
-        .map(|(i, token)| {
-            if ignore_list.contains(&i) {
-                if let TokenTree::Ident(ident) = token.clone() {
-                    fields_to_ignore.push(ident);
-                }
+        if let TokenTree::Ident(id) = token.clone() {
+            if to_skip {
+                fields_to_ignore.push(id);
+                to_skip = false;
             }
+        }
 
-            token
-        })
-        .collect();
+        tokens_whitelist.push(token);
+    }
 
-    Group::new(group.delimiter(), TokenStream::from_iter(out_stream))
+    Group::new(group.delimiter(), TokenStream::from_iter(tokens_whitelist))
 }
 
 /// Consume a stream and return a new stream
-/// with all attributes removed, also return
+/// with all used attributes removed, also return
 /// a list of the field idents that were affected
 /// by these attributes, since we only have an
 /// skip attribute, this is a list of fields to ignore.
@@ -168,32 +163,13 @@ fn get_impl_for_field(stream: TokenStream, field_name_ident: Ident) -> Option<To
     }
 }
 
-/// The Optional Builder Macro adds an method
-/// for every Option field on a struct for
-/// optional definition.
+/// The optional_builder procedural macro
+/// adds an implementation of two functions
+/// for every option guarded field:
 ///
-/// e.g.
-///
-/// Struct S {
-///   foo: Option<A>
-/// }
-///
-/// Would generate
-///
-/// impl S {
-///     pub fn with_foo(inner: A) -> Self {
-///         self.foo = Some(inner);
-///     
-///         self
-///     }
-/// 
-///     pub fn without_foo() -> Self {
-///         self.foo = None;
-/// 
-///         self
-///     }
-///     
-/// }
+/// with_#field_name and without_#fieldname,
+/// responsible for both injecting data into
+/// field and removing it.
 #[proc_macro_attribute]
 pub fn optional_builder(
     _: proc_macro::TokenStream,
