@@ -49,8 +49,8 @@ impl TelegramRequest {
         self
     }
 
-    pub fn with_uploader<U: FileUploader>(self, file_uploader: U) -> Self {
-        file_uploader.upload_into(self)
+    pub fn with_uploader<U: Uploader>(self, tag: &str, file_uploader: U) -> Self {
+        file_uploader.upload_into(tag, self)
     }
 
     pub fn execute<O: DeserializeOwned + std::fmt::Debug>(
@@ -291,11 +291,11 @@ impl Bot {
     pub fn set_chat_photo<ID: Into<ChatID>>(
         self,
         chat_id: ID,
-        file_uploader: PostUploader,
+        file_uploader: FileUploader,
     ) -> impl Future<Item = (Self, bool), Error = APIError> {
         TelegramRequest::new(Method::POST, self.get_route(&"setChatPhoto"), self)
             .with_query(chat_id.into())
-            .with_uploader(file_uploader)
+            .with_uploader("photo", file_uploader)
             .execute()
     }
 
@@ -304,18 +304,14 @@ impl Bot {
     /// Photos can be uploaded by Id, Url and Post
     /// methods. Note that chat photo id's are only
     /// usable for downloading a chat photo, not here.
-    pub fn send_photo<U: FileUploader>(
+    pub fn send_photo<U: Uploader>(
         self,
-        send_photo: SendPhoto<U>,
+        send_photo: SendPhoto,
+        file_uploader: U,
     ) -> impl Future<Item = (Self, Message), Error = APIError> {
-        let SendPhoto {
-            args,
-            file_uploader,
-        } = send_photo;
-
         TelegramRequest::new(Method::POST, self.get_route(&"sendPhoto"), self)
-            .with_query(args)
-            .with_uploader(file_uploader)
+            .with_query(send_photo)
+            .with_uploader("photo", file_uploader)
             .execute()
     }
 }

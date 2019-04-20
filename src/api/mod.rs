@@ -2,6 +2,7 @@ pub mod args;
 pub mod datatypes;
 pub mod error;
 pub mod methods;
+pub mod uploaders;
 
 use std::sync::Arc;
 

@@ -8,6 +8,7 @@ pub mod prelude {
     pub use crate::api::args::*;
     pub use crate::api::datatypes::*;
     pub use crate::api::error::APIError;
+    pub use crate::api::uploaders::*;
     pub use crate::api::APIResponse;
     pub use crate::api::APIResult;
     pub use crate::api::Bot;
