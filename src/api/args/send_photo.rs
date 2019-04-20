@@ -17,9 +17,9 @@ pub struct SendPhoto {
 }
 
 impl SendPhoto {
-    pub fn new(chat_id: ChatID) -> Self {
+    pub fn new<ID: Into<ChatID>>(chat_id: ID) -> Self {
         Self {
-            chat_id,
+            chat_id: chat_id.into(),
             ..Default::default()
         }
     }
