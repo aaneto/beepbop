@@ -64,7 +64,7 @@ impl Bot {
 
                 (self, file_buffer)
             })
-            .map_err(|err| err.into())
+            .map_err(std::convert::Into::into)
     }
 
     #[inline]

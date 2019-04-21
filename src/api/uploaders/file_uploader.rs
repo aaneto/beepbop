@@ -1,8 +1,7 @@
-use std::path::PathBuf;
-
 use futures::future::Future;
 use reqwest::r#async::multipart::Form;
 use reqwest::r#async::multipart::Part;
+use std::path::PathBuf;
 
 use crate::api::uploaders::IdPostUploader;
 use crate::api::uploaders::Uploader;
@@ -22,7 +21,7 @@ impl FileUploader {
             .file_name()
             .ok_or(UploaderError::NoFileName)
             .and_then(|name| name.to_str().ok_or(UploaderError::InvalidUTF))
-            .map(|name_str| name_str.to_owned());
+            .map(std::borrow::ToOwned::to_owned);
 
         let read = tokio::fs::read(file_path);
 
