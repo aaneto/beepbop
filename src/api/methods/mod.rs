@@ -11,6 +11,7 @@ pub mod pin_message;
 pub mod promote_chat_member;
 pub mod restrict_chat_member;
 pub mod send_contact;
+pub mod send_document;
 pub mod send_location;
 pub mod send_message;
 pub mod send_photo;

@@ -42,7 +42,7 @@ impl Error for UploaderError {
 /// (Max 10MB for photos and 50MB for other content)
 ///
 /// Filed and URL are just sent by query while POST is a multipart form.
-pub trait Uploader {
+pub trait Uploader: std::fmt::Debug {
     /// Get a RequestBuilder and add self to it as query or multiform data.
     fn upload_into(self, tag: &str, builder: TelegramRequest) -> TelegramRequest;
 }

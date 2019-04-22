@@ -1,5 +1,4 @@
 use futures::future::Future;
-use reqwest::r#async::multipart::Form;
 use reqwest::r#async::multipart::Part;
 use std::path::PathBuf;
 
@@ -14,7 +13,7 @@ pub struct FileUploader {
 }
 
 impl FileUploader {
-    pub fn new<P: Into<PathBuf>>(path_into: P, mime_string: &str) -> Result<Self, UploaderError> {
+    pub fn new<P: Into<PathBuf>>(path_into: P) -> Result<Self, UploaderError> {
         let file_path: PathBuf = path_into.into();
 
         let file_name = file_path
@@ -27,18 +26,27 @@ impl FileUploader {
 
         let mut part = Part::stream(read.into_stream());
 
-        part = part
-            .mime_str(mime_string)
-            .map_err(UploaderError::WrongMime)?;
         part = part.file_name(file_name?);
 
         Ok(Self { part })
+    }
+
+    pub fn with_mime(mut self, mime_string: &str) -> Result<Self, UploaderError> {
+        self.part = self.part
+            .mime_str(mime_string)
+            .map_err(UploaderError::WrongMime)?;
+        
+        Ok(self)
+    }
+
+    pub fn new_with_mime<P: Into<PathBuf>>(path_into: P, mime_string: &str) -> Result<Self, UploaderError> {
+        FileUploader::new(path_into).and_then(|uploader| uploader.with_mime(mime_string))
     }
 }
 
 impl Uploader for FileUploader {
     fn upload_into(self, tag: &str, builder: TelegramRequest) -> TelegramRequest {
-        builder.with_multipart(Form::new().part(tag.to_owned(), self.part))
+        builder.with_form_part(tag, self.part)
     }
 }
 

@@ -2,7 +2,7 @@ use crate::api::uploaders::IdPostUploader;
 use crate::api::uploaders::Uploader;
 use crate::api::TelegramRequest;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct IdUploader {
     id: String,
 }

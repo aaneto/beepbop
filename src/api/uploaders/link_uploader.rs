@@ -1,7 +1,7 @@
 use crate::api::uploaders::Uploader;
 use crate::api::TelegramRequest;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct LinkUploader {
     url: String,
 }

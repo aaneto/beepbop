@@ -3,11 +3,12 @@ use serde_derive::Serialize;
 
 use crate::api::args::ChatID;
 use crate::api::args::ReplyMarkup;
+use crate::api::uploaders::FileUploader;
 use crate::api::uploaders::Uploader;
 
 #[optional_builder]
-#[derive(Default, Clone, Debug, Serialize)]
-pub struct SendPhotoMeta {
+#[derive(Default, Debug, Serialize)]
+pub struct SendDocumentQuery {
     #[serde(flatten)]
     pub chat_id: ChatID,
     pub caption: Option<String>,
@@ -17,24 +18,31 @@ pub struct SendPhotoMeta {
     pub reply_markup: Option<ReplyMarkup>,
 }
 
-pub struct SendPhoto<U: Uploader> {
-    pub query: SendPhotoMeta,
-    pub photo_uploader: U,
+#[optional_builder]
+#[derive(Debug)]
+pub struct SendDocument<T: Uploader> {
+    pub document: T,
+    pub query: SendDocumentQuery,
+    pub thumbnail: Option<FileUploader>,
 }
 
-impl<U> SendPhoto<U>
+impl<U> SendDocument<U>
 where
     U: Uploader,
 {
-    pub fn new<ID: Into<ChatID>>(chat_id: ID, photo_uploader: U) -> Self {
-        let query = SendPhotoMeta {
+    pub fn new<ID>(chat_id: ID, document: U) -> Self
+    where
+        ID: Into<ChatID>,
+    {
+        let query = SendDocumentQuery {
             chat_id: chat_id.into(),
             ..Default::default()
         };
 
         Self {
+            document,
             query,
-            photo_uploader,
+            thumbnail: None,
         }
     }
 }
