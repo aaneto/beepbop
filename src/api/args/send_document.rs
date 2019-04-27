@@ -3,7 +3,6 @@ use serde_derive::Serialize;
 
 use crate::api::args::ChatID;
 use crate::api::args::ReplyMarkup;
-use crate::api::uploaders::FileUploader;
 use crate::api::uploaders::Uploader;
 
 #[optional_builder]
@@ -18,12 +17,10 @@ pub struct SendDocumentQuery {
     pub reply_markup: Option<ReplyMarkup>,
 }
 
-#[optional_builder]
 #[derive(Debug)]
 pub struct SendDocument<T: Uploader> {
     pub document: T,
     pub query: SendDocumentQuery,
-    pub thumbnail: Option<FileUploader>,
 }
 
 impl<U> SendDocument<U>
@@ -42,7 +39,6 @@ where
         Self {
             document,
             query,
-            thumbnail: None,
         }
     }
 }

@@ -20,17 +20,10 @@ impl Bot {
     ) -> impl Future<Item = (Self, Message), Error = APIError> {
         let SendDocument {
             query: query_data,
-            document: document_uploader,
-            thumbnail: thumbnail_uploader_option,
+            document: document_uploader
         } = send_document;
-
-        let mut request = TelegramRequest::new(Method::POST, self.get_route(&"sendDocument"), self);
-
-        if let Some(thumbnail_uploader) = thumbnail_uploader_option {
-            request = request.with_uploader("thumb", thumbnail_uploader);
-        }
-
-        request
+        
+        TelegramRequest::new(Method::POST, self.get_route(&"sendDocument"), self)
             .with_query(query_data)
             .with_uploader("document", document_uploader)
             .execute()

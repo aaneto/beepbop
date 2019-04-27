@@ -55,6 +55,6 @@ pub mod file_uploader;
 pub mod id_uploader;
 pub mod link_uploader;
 
-pub use file_uploader::FileUploader;
-pub use id_uploader::IdUploader;
-pub use link_uploader::LinkUploader;
+pub use file_uploader::*;
+pub use id_uploader::*;
+pub use link_uploader::*;

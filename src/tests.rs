@@ -65,10 +65,16 @@ fn document_upload_thumbnail() {
 
     let mut runtime = Runtime::new().expect("Unable to create a runtime");
 
-    let doc_uploader = FileUploader::new_with_mime("res/some_text", "text/plain").unwrap();
-    let thumb_uploader = FileUploader::new_with_mime("res/puppy.jpg", "image/jpg").unwrap();
+    let pupper_thumbnail = FileUploader::new("res/puppy.jpg")
+        .and_then(add_mime("image/jpg"))
+        .unwrap();
+    
+    let text_file = FileUploader::new("res/some_text")
+        .and_then(add_mime("text/plain"))
+        .map(add_thumbnail(pupper_thumbnail))
+        .unwrap();
 
-    let arg = SendDocument::new(chat_id, doc_uploader).with_thumbnail(thumb_uploader);
+    let arg = SendDocument::new(chat_id, text_file);
 
     if let Err(err) = runtime.block_on(bot.send_document(arg)) {
         panic!("{:#?}", err);
@@ -87,11 +93,10 @@ fn send_photo_future(file_name: &str, mime_string: Option<&str>) -> impl Future<
     let mut uploader_res = FileUploader::new(file_name);
 
     if let Some(mime_str) = mime_string {
-        uploader_res = uploader_res.and_then(|uploader| uploader.with_mime(mime_str));
+        uploader_res = uploader_res.and_then(add_mime(mime_str));
     }
 
     let arg = SendPhoto::new(chat_id, uploader_res.unwrap());
-
     bot.send_photo(arg)
 }
 
