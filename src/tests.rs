@@ -68,7 +68,7 @@ fn document_upload_thumbnail() {
     let pupper_thumbnail = FileUploader::new("res/puppy.jpg")
         .and_then(add_mime("image/jpg"))
         .unwrap();
-    
+
     let text_file = FileUploader::new("res/some_text")
         .and_then(add_mime("text/plain"))
         .map(add_thumbnail(pupper_thumbnail))
@@ -81,7 +81,10 @@ fn document_upload_thumbnail() {
     }
 }
 
-fn send_photo_future(file_name: &str, mime_string: Option<&str>) -> impl Future<Item=(Bot, Message), Error=APIError> {
+fn send_photo_future(
+    file_name: &str,
+    mime_string: Option<&str>,
+) -> impl Future<Item = (Bot, Message), Error = APIError> {
     let api_key = get_argv("API_KEY").expect("Cannot find API_KEY in ENV");
     let chat_id: i64 = get_argv("CHAT_ID")
         .expect("Cannot find CHAT_ID in ENV")

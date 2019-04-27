@@ -20,9 +20,9 @@ impl Bot {
     ) -> impl Future<Item = (Self, Message), Error = APIError> {
         let SendDocument {
             query: query_data,
-            document: document_uploader
+            document: document_uploader,
         } = send_document;
-        
+
         TelegramRequest::new(Method::POST, self.get_route(&"sendDocument"), self)
             .with_query(query_data)
             .with_uploader("document", document_uploader)

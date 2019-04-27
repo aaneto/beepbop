@@ -9,61 +9,59 @@ use crate::api::TelegramRequest;
 
 /// The FileUploader is an proxy object
 /// for a FileUploader Future:
-/// 
+///
 /// This object represents a
 /// file that can be uploaded asynchronously, the file
 /// is encoded as a multipart request.
-/// 
+///
 /// It is possible to add a thumbnail to this File.
 #[derive(Debug)]
 pub struct FileUploader {
     part: Part,
-    thumbnail: Option<Part>
+    thumbnail: Option<Part>,
 }
 
 /// Add a mime type to a FileUploader.
-/// 
+///
 /// This is designed to be combined with and_then when
 /// creating an FileUploader.
-/// 
+///
 /// ```rust
 /// use telegrambot::prelude::*;
-/// 
+///
 /// let pupper_thumbnail = FileUploader::new("res/puppy.jpg")
 ///     .and_then(add_mime("image/jpg"));
-/// 
+///
 /// assert!(pupper_thumbnail.is_ok());
 /// ```
-pub fn add_mime(mime_str: &str) -> impl FnOnce(FileUploader) -> Result<FileUploader, UploaderError> {
+pub fn add_mime(
+    mime_str: &str,
+) -> impl FnOnce(FileUploader) -> Result<FileUploader, UploaderError> {
     let mime_string = mime_str.to_owned();
-    
-    move |uploader: FileUploader| {
-        uploader.with_mime(&mime_string)
-    }
+
+    move |uploader: FileUploader| uploader.with_mime(&mime_string)
 }
 
 /// Add a thumbnail to a FileUploader.
-/// 
+///
 /// This is designed to be combined with and_then when
 /// creating an FileUploader.
-/// 
+///
 /// ```rust
 /// use telegrambot::prelude::*;
-/// 
+///
 /// let pupper_thumbnail = FileUploader::new("res/puppy.jpg")
 ///     .and_then(add_mime("image/jpg"))
 ///     .unwrap();
-/// 
+///
 /// let text_file = FileUploader::new("res/some_text")
 ///     .and_then(add_mime("text/plain"))
 ///     .map(add_thumbnail(pupper_thumbnail));
-/// 
+///
 /// assert!(text_file.is_ok());
 /// ```
 pub fn add_thumbnail(thumbnail: FileUploader) -> impl FnOnce(FileUploader) -> FileUploader {
-    move |uploader: FileUploader| {
-        uploader.with_thumbnail(thumbnail)
-    }
+    move |uploader: FileUploader| uploader.with_thumbnail(thumbnail)
 }
 
 impl FileUploader {
@@ -86,13 +84,14 @@ impl FileUploader {
                 part: part.file_name(name),
                 thumbnail: None,
             }),
-            Err(err) => Err(err)
+            Err(err) => Err(err),
         }
     }
 
     /// Try to add a mime type to the FileUploader.
     pub fn with_mime(mut self, mime_string: &str) -> Result<Self, UploaderError> {
-        self.part = self.part
+        self.part = self
+            .part
             .mime_str(mime_string)
             .map_err(UploaderError::WrongMime)?;
 

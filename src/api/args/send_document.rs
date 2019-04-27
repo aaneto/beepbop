@@ -36,9 +36,6 @@ where
             ..Default::default()
         };
 
-        Self {
-            document,
-            query,
-        }
+        Self { document, query }
     }
 }
