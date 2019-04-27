@@ -1,8 +1,14 @@
+//! The API module covers everything API related, such
+//! as creating telegram requests, uploading data into
+//! telegram, actions and datatypes that are valid
+//! for a bot to perform.
+
 pub mod args;
 pub mod datatypes;
 pub mod error;
 pub mod methods;
 pub mod telegram_request;
+
 pub mod uploaders;
 
 pub use telegram_request::Method;
@@ -48,23 +54,27 @@ impl Bot {
 
     pub fn download_file(
         self,
-        file: datatypes::FileInfo,
+        file_id: String,
     ) -> impl Future<Item = (Self, FileBuffer), Error = APIError> {
-        let file_path = file.file_path.expect("API download file without file_path");
+        self.get_file(file_id).and_then(move |(bot, file_info)| {
+            let file_path = file_info
+                .file_path
+                .expect("API download file without file_path");
 
-        let uri = self.get_file_uri(&file_path);
+            let uri = bot.get_file_uri(&file_path);
 
-        self.connection
-            .client
-            .get(&uri)
-            .send()
-            .and_then(|response: Response| response.into_body().concat2())
-            .map(move |chunks: Chunk| {
-                let file_buffer = datatypes::FileBuffer::new(file_path, chunks.to_vec());
+            bot.connection
+                .client
+                .get(&uri)
+                .send()
+                .and_then(|response: Response| response.into_body().concat2())
+                .map(move |chunks: Chunk| {
+                    let file_buffer = datatypes::FileBuffer::new(file_path, chunks.to_vec());
 
-                (self, file_buffer)
-            })
-            .map_err(std::convert::Into::into)
+                    (bot, file_buffer)
+                })
+                .map_err(std::convert::Into::into)
+        })
     }
 
     #[inline]
