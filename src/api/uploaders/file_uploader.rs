@@ -1,7 +1,9 @@
-use futures::future::Future;
-use reqwest::r#async::multipart::Part;
 use std::path::PathBuf;
 
+use futures::future::Future;
+use reqwest::r#async::multipart::Part;
+
+use crate::api::datatypes::FileBuffer;
 use crate::api::uploaders::IdPostUploader;
 use crate::api::uploaders::Uploader;
 use crate::api::uploaders::UploaderError;
@@ -85,6 +87,24 @@ impl FileUploader {
                 thumbnail: None,
             }),
             Err(err) => Err(err),
+        }
+    }
+
+    pub fn from_bytes(name: &str, bytes: Vec<u8>) -> Self {
+        let part = Part::bytes(bytes).file_name(name.to_owned());
+
+        Self {
+            part,
+            thumbnail: None,
+        }
+    }
+
+    pub fn from_file(file: FileBuffer) -> Self {
+        let part = Part::bytes(file.data).file_name(file.name.replace("/", "_").to_owned());
+
+        Self {
+            part,
+            thumbnail: None,
         }
     }
 
