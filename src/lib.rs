@@ -51,11 +51,11 @@
 //!         .and_then(|(_, file_buffer)| {
 //!             let save_name = file_buffer.name.replace("/", "_");
 //!
-//!             file_buffer.save_as(save_name)
+//!             file_buffer.save_as(format!("res/{}", save_name))
 //!         })
 //!         .map_err(|err| println!("{:?}", err))
 //! );
-//! 
+//!
 //! ```
 
 pub mod api;
