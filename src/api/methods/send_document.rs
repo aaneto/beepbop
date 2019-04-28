@@ -14,18 +14,15 @@ impl Bot {
     /// Photos can be uploaded by Id, Url and Post
     /// methods. Note that chat photo id's are only
     /// usable for downloading a chat photo, not here.
-    pub fn send_document<U: Uploader>(
+    pub fn send_document<U: Uploader + Default>(
         self,
         send_document: SendDocument<U>,
     ) -> impl Future<Item = (Self, Message), Error = APIError> {
-        let SendDocument {
-            query: query_data,
-            document: document_uploader,
-        } = send_document;
+        let (query, uploader) = send_document.split();
 
         TelegramRequest::new(Method::POST, self.get_route(&"sendDocument"), self)
-            .with_query(query_data)
-            .with_uploader("document", document_uploader)
+            .with_query(query)
+            .with_uploader("document", uploader)
             .execute()
     }
 }
