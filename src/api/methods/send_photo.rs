@@ -32,15 +32,15 @@ impl Bot {
 
 #[cfg(test)]
 mod tests {
+    use crate::api::args::SendPhoto;
+    use crate::api::datatypes::Message;
+    use crate::api::error::APIError;
+    use crate::api::uploaders::add_mime;
+    use crate::api::uploaders::FileUploader;
+    use crate::api::Bot;
+    use crate::util::get_argv;
     use futures::Future;
     use tokio::runtime::Runtime;
-    use crate::util::get_argv;
-    use crate::api::Bot;
-    use crate::api::datatypes::Message;
-    use crate::api::uploaders::FileUploader;
-    use crate::api::uploaders::add_mime;
-    use crate::api::args::SendPhoto;
-    use crate::api::error::APIError;
 
     fn send_photo_future(
         file_name: &str,
@@ -68,7 +68,9 @@ mod tests {
     fn send_photo() {
         let mut runtime = Runtime::new().expect("Unable to create a runtime");
 
-        if let Err(err) = runtime.block_on(send_photo_future("res/brownpuppy.png", Some("image/png"))) {
+        if let Err(err) =
+            runtime.block_on(send_photo_future("res/brownpuppy.png", Some("image/png")))
+        {
             panic!("{:#?}", err);
         }
     }

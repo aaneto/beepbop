@@ -32,13 +32,13 @@ impl Bot {
 
 #[cfg(test)]
 mod tests {
-    use tokio::runtime::Runtime;
-    use crate::util::get_argv;
-    use crate::api::Bot;
-    use crate::api::uploaders::FileUploader;
+    use crate::api::args::SendDocument;
     use crate::api::uploaders::add_mime;
     use crate::api::uploaders::add_thumbnail;
-    use crate::api::args::SendDocument;
+    use crate::api::uploaders::FileUploader;
+    use crate::api::Bot;
+    use crate::util::get_argv;
+    use tokio::runtime::Runtime;
 
     #[test]
     fn document_upload_thumbnail() {
@@ -67,7 +67,5 @@ mod tests {
             panic!("{:#?}", err);
         }
     }
-
-    
 
 }

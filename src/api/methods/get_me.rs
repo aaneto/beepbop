@@ -14,11 +14,10 @@ impl Bot {
 
 #[cfg(test)]
 mod tests {
+    use crate::api::Bot;
+    use crate::util::get_argv;
     use std::error::Error;
     use tokio::runtime::Runtime;
-    use crate::util::get_argv;
-    use crate::api::Bot;
-
 
     #[test]
     fn test_get_me() {

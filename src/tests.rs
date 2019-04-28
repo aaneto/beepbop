@@ -1,10 +1,10 @@
 //! Integration tests for telegrambot.
+use crate::api::args::SendDocument;
+use crate::api::uploaders::FileUploader;
+use crate::api::Bot;
+use crate::util::get_argv;
 use futures::Future;
 use tokio::runtime::Runtime;
-use crate::util::get_argv;
-use crate::api::Bot;
-use crate::api::uploaders::FileUploader;
-use crate::api::args::SendDocument;
 
 #[test]
 fn photo_reupload() {
@@ -18,7 +18,8 @@ fn photo_reupload() {
 
     let mut runtime = Runtime::new().expect("Unable to create a runtime");
 
-    let fut = bot.get_chat(chat_id.clone())
+    let fut = bot
+        .get_chat(chat_id.clone())
         .and_then(|(bot, chat)| {
             let file_id = chat.photo.unwrap().big_file_id;
 
