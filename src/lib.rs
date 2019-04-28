@@ -62,9 +62,6 @@ pub mod api;
 mod macros;
 pub mod util;
 
-#[cfg(test)]
-mod tests;
-
 /// Common types and functions used to build
 /// telegram bots.
 pub mod prelude {
