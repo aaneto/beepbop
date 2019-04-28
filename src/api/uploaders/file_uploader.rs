@@ -23,6 +23,15 @@ pub struct FileUploader {
     thumbnail: Option<Part>,
 }
 
+impl Default for FileUploader {
+    fn default() -> FileUploader {
+        FileUploader {
+            part: Part::bytes(vec![]).file_name("empty"),
+            thumbnail: None,
+        }
+    }
+}
+
 /// Add a mime type to a FileUploader.
 ///
 /// This is designed to be combined with and_then when

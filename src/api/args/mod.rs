@@ -23,6 +23,7 @@ pub mod send_photo;
 pub mod set_chat_description;
 pub mod set_chat_sticker_set;
 pub mod set_chat_title;
+pub mod send_voice;
 
 pub use chat_id::*;
 pub use force_reply::*;
@@ -49,3 +50,4 @@ pub use send_photo::*;
 pub use set_chat_description::*;
 pub use set_chat_sticker_set::*;
 pub use set_chat_title::*;
+pub use send_voice::*;

@@ -23,7 +23,7 @@ There are some methods implemented and others in need of an implementation, here
 - [x] sendDocument
 - [ ] sendVideo
 - [ ] sendAnimation
-- [ ] sendVoice
+- [x] sendVoice
 - [ ] sendVideoNote
 - [ ] sendMediaGroup
 - [x] sendLocation
