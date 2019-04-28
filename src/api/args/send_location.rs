@@ -8,7 +8,6 @@ use crate::api::args::ReplyMarkup;
 #[optional_builder]
 #[derive(Clone, Debug, Serialize)]
 pub struct SendLocation {
-    #[serde(flatten)]
     pub chat_id: ChatID,
     pub latitude: f64,
     pub longitude: f64,

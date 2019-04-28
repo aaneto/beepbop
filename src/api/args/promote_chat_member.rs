@@ -7,7 +7,6 @@ use crate::api::args::ChatID;
 #[optional_builder]
 #[derive(Default, Debug, Serialize)]
 pub struct PromoteChatMember {
-    #[serde(flatten)]
     pub chat_id: ChatID,
     pub user_id: i64,
     pub can_change_info: Option<bool>,

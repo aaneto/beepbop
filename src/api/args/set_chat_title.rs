@@ -4,7 +4,6 @@ use crate::api::args::ChatID;
 
 #[derive(Debug, Serialize)]
 pub struct SetChatTitle {
-    #[serde(flatten)]
     pub chat_id: ChatID,
     pub title: String,
 }

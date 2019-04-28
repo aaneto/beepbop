@@ -8,7 +8,6 @@ use crate::api::uploaders::Uploader;
 #[optional_builder]
 #[derive(Default, Debug, Serialize)]
 pub struct SendDocumentQuery {
-    #[serde(flatten)]
     pub chat_id: ChatID,
     pub caption: Option<String>,
     pub parse_mode: Option<String>,

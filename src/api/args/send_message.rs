@@ -7,7 +7,6 @@ use crate::api::args::ReplyMarkup;
 #[optional_builder]
 #[derive(Debug, Default, Serialize)]
 pub struct SendMessage {
-    #[serde(flatten)]
     pub chat_id: ChatID,
     pub text: String,
     pub parse_mode: Option<String>,

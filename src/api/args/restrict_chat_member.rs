@@ -7,7 +7,6 @@ use crate::api::args::ChatID;
 #[optional_builder]
 #[derive(Default, Debug, Serialize)]
 pub struct RestrictChatMember {
-    #[serde(flatten)]
     pub chat_id: ChatID,
     pub user_id: i64,
     pub until_date: Option<u64>,
