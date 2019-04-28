@@ -17,7 +17,7 @@ There are some methods implemented and others in need of an implementation, here
 - [x] getMe
 - [x] getUpdates
 - [x] sendMessage
-- [ ] forwardMessage
+- [x] forwardMessage
 - [x] sendPhoto
 - [ ] sendAudio
 - [x] sendDocument

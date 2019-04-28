@@ -1,5 +1,6 @@
 pub mod delete_chat_photo;
 pub mod delete_chat_sticker_set;
+pub mod forward_message;
 pub mod get_chat;
 pub mod get_chat_admins;
 pub mod get_chat_member;

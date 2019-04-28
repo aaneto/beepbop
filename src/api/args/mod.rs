@@ -1,5 +1,6 @@
 pub mod chat_id;
 pub mod force_reply;
+pub mod forward_message;
 pub mod get_chat;
 pub mod get_chat_member;
 pub mod get_file;
@@ -25,6 +26,7 @@ pub mod set_chat_title;
 
 pub use chat_id::*;
 pub use force_reply::*;
+pub use forward_message::*;
 pub use get_chat::*;
 pub use get_chat_member::*;
 pub use get_file::*;
