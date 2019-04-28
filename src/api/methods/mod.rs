@@ -22,3 +22,4 @@ pub mod set_chat_sticker_set;
 pub mod set_chat_title;
 pub mod unpin_message;
 pub mod send_voice;
+pub mod send_audio;

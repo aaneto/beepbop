@@ -19,7 +19,7 @@ There are some methods implemented and others in need of an implementation, here
 - [x] sendMessage
 - [x] forwardMessage
 - [x] sendPhoto
-- [ ] sendAudio
+- [x] sendAudio
 - [x] sendDocument
 - [ ] sendVideo
 - [ ] sendAnimation

@@ -24,6 +24,7 @@ pub mod set_chat_description;
 pub mod set_chat_sticker_set;
 pub mod set_chat_title;
 pub mod send_voice;
+pub mod send_audio;
 
 pub use chat_id::*;
 pub use force_reply::*;
@@ -51,3 +52,4 @@ pub use set_chat_description::*;
 pub use set_chat_sticker_set::*;
 pub use set_chat_title::*;
 pub use send_voice::*;
+pub use send_audio::*;
