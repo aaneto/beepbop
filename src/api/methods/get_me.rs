@@ -15,13 +15,13 @@ impl Bot {
 #[cfg(test)]
 mod tests {
     use crate::api::Bot;
-    use crate::util::get_argv;
+    use std::env::var;
     use std::error::Error;
     use tokio::runtime::Runtime;
 
     #[test]
     fn test_get_me() {
-        let api_key = get_argv("API_KEY").expect("Cannot find API_KEY in ENV");
+        let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
         let bot = Bot::new(&api_key);
 
         let mut runtime = Runtime::new().expect("Unable to create a runtime");

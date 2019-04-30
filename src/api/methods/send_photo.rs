@@ -35,16 +35,16 @@ mod tests {
     use crate::api::uploaders::add_mime;
     use crate::api::uploaders::FileUploader;
     use crate::api::Bot;
-    use crate::util::get_argv;
     use futures::Future;
+    use std::env::var;
     use tokio::runtime::Runtime;
 
     fn send_photo_future(
         file_name: &str,
         mime_string: Option<&str>,
     ) -> impl Future<Item = (Bot, Message), Error = APIError> {
-        let api_key = get_argv("API_KEY").expect("Cannot find API_KEY in ENV");
-        let chat_id: i64 = get_argv("CHAT_ID")
+        let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
+        let chat_id: i64 = var("CHAT_ID")
             .expect("Cannot find CHAT_ID in ENV")
             .parse()
             .expect("CHAT_ID is not an valid ID.");

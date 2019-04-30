@@ -32,34 +32,28 @@ impl Bot {
 #[cfg(test)]
 mod tests {
     use crate::api::Bot;
-    use crate::util::get_argv;
+    use std::env::var;
     use tokio::runtime::Runtime;
 
     #[test]
     fn resend_message() {
-        let api_key = get_argv("API_KEY").expect("Cannot find API_KEY in ENV");
+        let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
 
-        let message_id: i64 = get_argv("MESSAGE_ID")
+        let message_id: i64 = var("MESSAGE_ID")
             .expect("Cannot find MESSAGE_ID in ENV")
             .parse()
             .expect("MESSAGE_ID is not an valid ID.");
 
-        let from_chat_id: i64 = get_argv("FROM_CHAT_ID")
-            .expect("Cannot find FROM_CHAT_ID in ENV")
+        let chat_id: i64 = var("CHAT_ID")
+            .expect("Cannot find CHAT_ID in ENV")
             .parse()
-            .expect("FROM_CHAT_ID is not an valid ID.");
-
-        let to_chat_id: i64 = get_argv("TO_CHAT_ID")
-            .expect("Cannot find TO_CHAT_ID in ENV")
-            .parse()
-            .expect("TO_CHAT_ID is not an valid ID.");
+            .expect("CHAT_ID is not an valid ID.");
 
         let bot = Bot::new(&api_key);
 
         let mut runtime = Runtime::new().expect("Unable to create a runtime");
 
-        if let Err(err) =
-            runtime.block_on(bot.forward_message(to_chat_id, from_chat_id, message_id, false))
+        if let Err(err) = runtime.block_on(bot.forward_message(chat_id, chat_id, message_id, false))
         {
             panic!("{:#?}", err);
         }

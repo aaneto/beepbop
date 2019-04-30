@@ -13,9 +13,10 @@
 //! of the last action.
 //!
 //! ```rust
+//! use std::env::var;
 //! use telegrambot::prelude::*;
 //!
-//! let api_key = get_argv("API_KEY").expect("Cannot find API_KEY in ENV");
+//! let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
 //!
 //! let bot = Bot::new(&api_key);
 //!
@@ -33,10 +34,11 @@
 //!
 //!
 //! ```rust
+//! use std::env::var;
 //! use telegrambot::prelude::*;
 //!
-//! let api_key = get_argv("API_KEY").expect("Cannot find API_KEY in ENV");
-//! let chat_id = get_argv("CHAT_ID").expect("Cannot find CHAT_ID in ENV");
+//! let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
+//! let chat_id = var("CHAT_ID").expect("Cannot find CHAT_ID in ENV");
 //!
 //! let bot = Bot::new(&api_key);
 //!
@@ -60,7 +62,6 @@
 
 pub mod api;
 mod macros;
-pub mod util;
 
 #[cfg(test)]
 pub mod tests;
@@ -75,7 +76,6 @@ pub mod prelude {
     pub use crate::api::APIResponse;
     pub use crate::api::APIResult;
     pub use crate::api::Bot;
-    pub use crate::util::*;
     pub use futures;
     pub use futures::Future;
     pub use reqwest;

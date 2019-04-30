@@ -27,13 +27,13 @@ mod tests {
     use crate::api::args::SendVoice;
     use crate::api::uploaders::FileUploader;
     use crate::api::Bot;
-    use crate::util::get_argv;
+    use std::env::var;
     use tokio::runtime::Runtime;
 
     #[test]
     fn test_send_voice() {
-        let api_key = get_argv("API_KEY").expect("Cannot find API_KEY in ENV");
-        let chat_id: i64 = get_argv("CHAT_ID")
+        let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
+        let chat_id: i64 = var("CHAT_ID")
             .expect("Cannot find CHAT_ID in ENV")
             .parse()
             .expect("CHAT_ID is not an valid ID.");
