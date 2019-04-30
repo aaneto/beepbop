@@ -58,3 +58,18 @@ pub mod link_uploader;
 pub use file_uploader::*;
 pub use id_uploader::*;
 pub use link_uploader::*;
+
+pub fn file<P>(path: P) -> Result<FileUploader, UploaderError>
+where
+    P: Into<std::path::PathBuf>,
+{
+    FileUploader::new(path)
+}
+
+pub fn file_id(id: &str) -> IdUploader {
+    IdUploader::new(id)
+}
+
+pub fn file_link(link: &str) -> LinkUploader {
+    LinkUploader::new(link)
+}
