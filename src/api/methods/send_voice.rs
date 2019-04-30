@@ -3,10 +3,10 @@ use futures::Future;
 use crate::api::args::SendVoice;
 use crate::api::datatypes::Message;
 use crate::api::error::APIError;
+use crate::api::uploaders::Uploader;
 use crate::api::Bot;
 use crate::api::Method;
 use crate::api::TelegramRequest;
-use crate::api::uploaders::Uploader;
 
 impl Bot {
     pub fn send_voice<T: Uploader + Default>(
@@ -42,8 +42,7 @@ mod tests {
 
         let mut runtime = Runtime::new().expect("Unable to create a runtime");
 
-        let voice = FileUploader::new("res/voice.ogg")
-            .unwrap();
+        let voice = FileUploader::new("res/voice.ogg").unwrap();
 
         let arg = SendVoice::new(chat_id, voice);
 

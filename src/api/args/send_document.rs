@@ -19,7 +19,7 @@ pub struct SendDocumentQuery {
 #[derive(Default, Debug)]
 pub struct SendDocument<U>
 where
-    U: Uploader + Default
+    U: Uploader + Default,
 {
     pub document: U,
     pub chat_id: ChatID,

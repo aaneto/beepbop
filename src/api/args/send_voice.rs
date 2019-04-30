@@ -5,12 +5,11 @@ use crate::api::args::ChatID;
 use crate::api::args::ReplyMarkup;
 use crate::api::uploaders::Uploader;
 
-
 #[optional_builder]
 #[derive(Debug, Default)]
 pub struct SendVoice<T>
 where
-    T: Uploader + Default
+    T: Uploader + Default,
 {
     pub chat_id: ChatID,
     pub voice: T,
@@ -20,7 +19,7 @@ where
     pub duration: Option<u32>,
     pub disable_notification: Option<bool>,
     pub reply_to_message_id: Option<i32>,
-    pub reply_markup: Option<ReplyMarkup>
+    pub reply_markup: Option<ReplyMarkup>,
 }
 
 #[derive(Serialize)]
@@ -32,12 +31,12 @@ pub struct SendVoiceQuery {
     pub duration: Option<u32>,
     pub disable_notification: Option<bool>,
     pub reply_to_message_id: Option<i32>,
-    pub reply_markup: Option<ReplyMarkup>
+    pub reply_markup: Option<ReplyMarkup>,
 }
 
 impl<T: Uploader> SendVoice<T>
 where
-    T: Uploader + Default
+    T: Uploader + Default,
 {
     pub fn new<ID: Into<ChatID>>(chat_id: ID, voice: T) -> Self {
         Self {
@@ -60,5 +59,4 @@ where
 
         (query, self.voice)
     }
-
 }

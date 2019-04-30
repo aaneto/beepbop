@@ -19,7 +19,7 @@ pub struct SendPhotoQuery {
 #[derive(Debug, Default)]
 pub struct SendPhoto<U>
 where
-    U: Uploader + Default
+    U: Uploader + Default,
 {
     pub photo_uploader: U,
     pub chat_id: ChatID,
