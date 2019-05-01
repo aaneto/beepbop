@@ -20,7 +20,7 @@ COPY src/ src/
 ENV API_KEY="YOUR_API_KEY"
 ENV CHAT_ID="YOUR_CHAT_ID"
 
-# Valid message ID on FROM_CHAT_ID for forward message.
+# A valid message on CHAT_ID that can be forwarded.
 ENV MESSAGE_ID="MESSAGE_ID"
 
 RUN mkdir res
