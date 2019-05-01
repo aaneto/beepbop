@@ -97,7 +97,7 @@ pub mod set_chat_title;
 pub mod file_uploader;
 pub mod id_uploader;
 pub mod link_uploader;
-
+pub mod send_video;
 
 pub use chat_id::*;
 pub use force_reply::*;
@@ -129,3 +129,4 @@ pub use set_chat_title::*;
 pub use file_uploader::*;
 pub use id_uploader::*;
 pub use link_uploader::*;
+pub use send_video::*;

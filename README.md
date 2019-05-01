@@ -71,7 +71,7 @@ There are some methods implemented and others in need of an implementation, here
 - [x] sendPhoto
 - [x] sendAudio
 - [x] sendDocument
-- [ ] sendVideo
+- [x] sendVideo
 - [ ] sendAnimation
 - [x] sendVoice
 - [ ] sendVideoNote
