@@ -1,9 +1,9 @@
 use futures::Future;
 
-use crate::input::ChatID;
 use crate::error::BotError;
-use crate::Bot;
+use crate::input::ChatID;
 use crate::telegram_request::{Method, TelegramRequest};
+use crate::Bot;
 
 impl Bot {
     pub fn delete_chat_photo<ID: Into<ChatID>>(

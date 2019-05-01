@@ -1,11 +1,11 @@
 use futures::Future;
 
-use crate::input::SendAnimation;
-use crate::object::Message;
 use crate::error::BotError;
+use crate::input::SendAnimation;
 use crate::input::Uploader;
-use crate::Bot;
+use crate::object::Message;
 use crate::telegram_request::{Method, TelegramRequest};
+use crate::Bot;
 
 impl Bot {
     pub fn send_animation<U: Uploader + Default>(
@@ -23,13 +23,14 @@ impl Bot {
 
 #[cfg(test)]
 mod tests {
-    use crate::input::SendAnimation;
     use crate::input::file;
+    use crate::input::SendAnimation;
     use crate::Bot;
     use std::env::var;
     use tokio::runtime::Runtime;
 
     #[test]
+    #[ignore]
     fn test_send_animation() {
         let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
         let chat_id: i64 = var("CHAT_ID")
@@ -41,8 +42,7 @@ mod tests {
 
         let mut runtime = Runtime::new().expect("Unable to create a runtime");
 
-        let animation = file("res/anim.gif")
-            .unwrap();
+        let animation = file("res/anim.gif").unwrap();
 
         let arg = SendAnimation::new(chat_id, animation);
 

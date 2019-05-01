@@ -1,10 +1,10 @@
 use futures::Future;
 
-use crate::input::ChatID;
 use crate::error::BotError;
+use crate::input::ChatID;
 use crate::input::FileUploader;
-use crate::Bot;
 use crate::telegram_request::{Method, TelegramRequest};
+use crate::Bot;
 
 impl Bot {
     pub fn set_chat_photo<ID: Into<ChatID>>(

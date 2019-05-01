@@ -1,12 +1,13 @@
 //! Integration tests for telegrambot.
-use crate::input::SendDocument;
 use crate::input::FileUploader;
+use crate::input::SendDocument;
 use crate::Bot;
 use futures::Future;
 use std::env::var;
 use tokio::runtime::Runtime;
 
 #[test]
+#[ignore]
 fn photo_reupload() {
     let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
     let chat_id: i64 = var("CHAT_ID")
@@ -36,3 +37,5 @@ fn photo_reupload() {
         panic!("{:#?}", err);
     }
 }
+
+include!(concat!(env!("OUT_DIR"), "/skeptic-tests.rs"));

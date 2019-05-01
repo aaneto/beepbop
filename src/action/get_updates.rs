@@ -1,10 +1,10 @@
 use futures::Future;
 
+use crate::error::BotError;
 use crate::input::GetUpdates;
 use crate::object::Update;
-use crate::error::BotError;
-use crate::Bot;
 use crate::telegram_request::{Method, TelegramRequest};
+use crate::Bot;
 
 impl Bot {
     pub fn get_updates(

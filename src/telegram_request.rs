@@ -8,9 +8,9 @@ use reqwest::r#async::multipart::Part;
 use reqwest::r#async::RequestBuilder;
 use reqwest::r#async::Response;
 
-use crate::{Bot, BotResult};
 use crate::error::BotError;
 use crate::input::Uploader;
+use crate::{Bot, BotResult};
 
 pub enum Method {
     GET,

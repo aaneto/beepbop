@@ -1,17 +1,16 @@
 use futures::Future;
 
+use crate::error::BotError;
 use crate::input::ChatID;
 use crate::input::ExportChatInviteLink;
-use crate::error::BotError;
-use crate::Bot;
 use crate::telegram_request::{Method, TelegramRequest};
+use crate::Bot;
 
 impl Bot {
     pub fn export_chat_invite_link<ID: Into<ChatID>>(
         self,
         id: ID,
-    ) -> impl Future<Item = (Self, String), Error = BotError>
-    {
+    ) -> impl Future<Item = (Self, String), Error = BotError> {
         let arg = ExportChatInviteLink::new(id.into());
 
         TelegramRequest::new(Method::GET, self.get_route(&"exportChatInviteLink"), self)

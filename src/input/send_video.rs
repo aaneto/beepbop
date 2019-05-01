@@ -16,7 +16,7 @@ pub struct SendVideoQuery {
     pub support_streaming: Option<bool>,
     pub duration: Option<u32>,
     pub width: Option<u32>,
-    pub height: Option<u32>
+    pub height: Option<u32>,
 }
 
 #[optional_builder]
@@ -35,7 +35,7 @@ where
     pub support_streaming: Option<bool>,
     pub duration: Option<u32>,
     pub width: Option<u32>,
-    pub height: Option<u32>
+    pub height: Option<u32>,
 }
 
 impl<U> SendVideo<U>
@@ -64,7 +64,7 @@ where
             support_streaming: self.support_streaming,
             duration: self.duration,
             width: self.width,
-            height: self.height
+            height: self.height,
         };
 
         (query, self.video)

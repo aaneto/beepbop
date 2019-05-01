@@ -1,10 +1,10 @@
 use futures::Future;
 
+use crate::error::BotError;
 use crate::input::GetFile;
 use crate::object::FileInfo;
-use crate::error::BotError;
-use crate::Bot;
 use crate::telegram_request::{Method, TelegramRequest};
+use crate::Bot;
 
 impl Bot {
     pub fn get_file(

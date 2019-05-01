@@ -1,10 +1,10 @@
 use futures::Future;
 
+use crate::error::BotError;
 use crate::input::ChatID;
 use crate::input::SetChatStickerSet;
-use crate::error::BotError;
-use crate::Bot;
 use crate::telegram_request::{Method, TelegramRequest};
+use crate::Bot;
 
 impl Bot {
     /// Set sticker set for a group or chat.

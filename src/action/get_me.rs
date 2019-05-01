@@ -1,9 +1,9 @@
 use futures::Future;
 
-use crate::object::User;
 use crate::error::BotError;
-use crate::Bot;
+use crate::object::User;
 use crate::telegram_request::{Method, TelegramRequest};
+use crate::Bot;
 
 impl Bot {
     pub fn get_me(self) -> impl Future<Item = (Self, User), Error = BotError> {

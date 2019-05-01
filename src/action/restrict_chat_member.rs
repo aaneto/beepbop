@@ -1,9 +1,9 @@
 use futures::Future;
 
-use crate::input::RestrictChatMember;
 use crate::error::BotError;
-use crate::Bot;
+use crate::input::RestrictChatMember;
 use crate::telegram_request::{Method, TelegramRequest};
+use crate::Bot;
 
 impl Bot {
     pub fn restrict_chat_member(

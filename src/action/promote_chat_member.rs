@@ -1,9 +1,9 @@
 use futures::Future;
 
-use crate::input::PromoteChatMember;
 use crate::error::BotError;
-use crate::Bot;
+use crate::input::PromoteChatMember;
 use crate::telegram_request::{Method, TelegramRequest};
+use crate::Bot;
 
 impl Bot {
     /// Promote a chat member.

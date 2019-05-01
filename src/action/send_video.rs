@@ -1,11 +1,11 @@
 use futures::Future;
 
-use crate::input::SendVideo;
-use crate::object::Message;
 use crate::error::BotError;
+use crate::input::SendVideo;
 use crate::input::Uploader;
-use crate::Bot;
+use crate::object::Message;
 use crate::telegram_request::{Method, TelegramRequest};
+use crate::Bot;
 
 impl Bot {
     pub fn send_video<U: Uploader + Default>(
@@ -23,15 +23,16 @@ impl Bot {
 
 #[cfg(test)]
 mod tests {
-    use crate::input::SendVideo;
     use crate::input::add_mime;
     use crate::input::add_thumbnail;
     use crate::input::file;
+    use crate::input::SendVideo;
     use crate::Bot;
     use std::env::var;
     use tokio::runtime::Runtime;
 
     #[test]
+    #[ignore]
     fn test_send_video() {
         let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
         let chat_id: i64 = var("CHAT_ID")
@@ -42,7 +43,6 @@ mod tests {
         let bot = Bot::new(&api_key);
 
         let mut runtime = Runtime::new().expect("Unable to create a runtime");
-
 
         let puppy_photo = file("res/puppy.jpg").unwrap();
 

@@ -13,7 +13,7 @@ pub struct SendVideoNoteQuery {
     pub reply_markup: Option<ReplyMarkup>,
     pub duration: Option<u32>,
     pub width: Option<u32>,
-    pub height: Option<u32>
+    pub height: Option<u32>,
 }
 
 #[optional_builder]
@@ -29,7 +29,7 @@ where
     pub reply_markup: Option<ReplyMarkup>,
     pub duration: Option<u32>,
     pub width: Option<u32>,
-    pub height: Option<u32>
+    pub height: Option<u32>,
 }
 
 impl<U> SendVideoNote<U>
@@ -55,7 +55,7 @@ where
             reply_markup: self.reply_markup,
             duration: self.duration,
             width: self.width,
-            height: self.height
+            height: self.height,
         };
 
         (query, self.video_note)

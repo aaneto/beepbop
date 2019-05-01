@@ -1,12 +1,7 @@
 use serde_derive::Deserialize;
 
 use crate::object::{
-    CallbackQuery,
-    ChosenInlineResult,
-    InlineQuery,
-    Message,
-    PrecheckoutQuery,
-    ShippingQuery
+    CallbackQuery, ChosenInlineResult, InlineQuery, Message, PrecheckoutQuery, ShippingQuery,
 };
 
 #[derive(Debug, Deserialize)]

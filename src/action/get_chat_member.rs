@@ -1,11 +1,11 @@
 use futures::Future;
 
+use crate::error::BotError;
 use crate::input::ChatID;
 use crate::input::GetChatMember;
 use crate::object::ChatMember;
-use crate::error::BotError;
-use crate::Bot;
 use crate::telegram_request::{Method, TelegramRequest};
+use crate::Bot;
 
 impl Bot {
     pub fn get_chat_member<ID>(

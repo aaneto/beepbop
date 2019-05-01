@@ -1,11 +1,11 @@
 use futures::Future;
 
-use crate::input::SendPhoto;
-use crate::object::Message;
 use crate::error::BotError;
+use crate::input::SendPhoto;
 use crate::input::Uploader;
-use crate::Bot;
+use crate::object::Message;
 use crate::telegram_request::{Method, TelegramRequest};
+use crate::Bot;
 
 impl Bot {
     /// Send a photo in telegram.
@@ -28,11 +28,11 @@ impl Bot {
 
 #[cfg(test)]
 mod tests {
-    use crate::input::SendPhoto;
-    use crate::object::Message;
     use crate::error::BotError;
     use crate::input::add_mime;
     use crate::input::file;
+    use crate::input::SendPhoto;
+    use crate::object::Message;
     use crate::Bot;
     use futures::Future;
     use std::env::var;
@@ -61,6 +61,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn send_photo() {
         let mut runtime = Runtime::new().expect("Unable to create a runtime");
 
@@ -72,6 +73,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn send_photo_without_mime() {
         let mut runtime = Runtime::new().expect("Unable to create a runtime");
         if let Err(err) = runtime.block_on(send_photo_future("res/brownpuppy.png", None)) {
