@@ -135,6 +135,11 @@ All kinds of Pull Requests are welcome, from implementations to design suggestio
 
 ### Running Tests
 
-There are not a lot of tests right now, but you can run the tests by building the docker image after filling the important metadata (API_KEY only, for now).
+There is a dockerfile with all information needed for tests. Tests are organized as such:
 
-You can also set the env variables yourself and run cargo test.
+- Unit tests are on the same file as the source file.
+- Destructive actions, such as kicking a member or leaving a chat, are perferably tested on integration
+tests. Those should always be ignored by default.
+
+To execute tests, build and run the container created by the Dockerfile, if docker is not available,
+one can just read the file to set the environment variables and then run cargo test normally.
