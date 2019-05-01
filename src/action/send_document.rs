@@ -8,11 +8,6 @@ use crate::Bot;
 use crate::telegram_request::{Method, TelegramRequest};
 
 impl Bot {
-    /// Send a photo in telegram.
-    ///
-    /// Photos can be uploaded by Id, Url and Post
-    /// methods. Note that chat photo id's are only
-    /// usable for downloading a chat photo, not here.
     pub fn send_document<U: Uploader + Default>(
         self,
         send_document: SendDocument<U>,
