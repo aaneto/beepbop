@@ -9,3 +9,9 @@ pub struct GetUpdates {
     pub timeout: Option<i64>,
     pub allowed_updates: Vec<String>,
 }
+
+impl GetUpdates {
+    pub fn new() -> Self {
+        GetUpdates::default()
+    }
+}

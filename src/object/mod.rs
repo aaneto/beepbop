@@ -17,6 +17,8 @@ pub mod shipping_query;
 pub mod update;
 pub mod update_kind;
 pub mod user;
+pub mod photo_size;
+pub mod user_profile_photos;
 
 pub use callback_query::CallbackQuery;
 pub use chat::Chat;
@@ -37,3 +39,5 @@ pub use shipping_query::ShippingQuery;
 pub use update::Update;
 pub use update_kind::UpdateKind;
 pub use user::User;
+pub use photo_size::PhotoSize;
+pub use user_profile_photos::UserProfilePhotos;

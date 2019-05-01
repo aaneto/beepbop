@@ -10,11 +10,11 @@ impl Bot {
     pub fn set_chat_photo<ID: Into<ChatID>>(
         self,
         chat_id: ID,
-        file_uploader: FileUploader,
+        photo: FileUploader,
     ) -> impl Future<Item = (Self, bool), Error = BotError> {
         TelegramRequest::new(Method::POST, self.get_route(&"setChatPhoto"), self)
             .with_query(chat_id.into())
-            .with_uploader("photo", file_uploader)
+            .with_uploader("photo", photo)
             .execute()
     }
 }

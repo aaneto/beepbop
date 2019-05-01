@@ -72,7 +72,6 @@ There are some actions/methods in need of implementation, those are:
 - stopMessageLiveLocation
 - sendVenue
 - sendChatAction
-- getUserProfilePhotos
 - kickChatMember
 - unbanChatMember
 - answerCallbackQuery
