@@ -24,7 +24,7 @@ impl Bot {
 #[cfg(test)]
 mod tests {
     use crate::input::SendAudio;
-    use crate::input::FileUploader;
+    use crate::input::file;
     use crate::Bot;
     use std::env::var;
     use tokio::runtime::Runtime;
@@ -41,7 +41,7 @@ mod tests {
 
         let mut runtime = Runtime::new().expect("Unable to create a runtime");
 
-        let voice = FileUploader::new("res/sound.mp3").unwrap();
+        let voice = file("res/sound.mp3").unwrap();
 
         let arg = SendAudio::new(chat_id, voice);
 

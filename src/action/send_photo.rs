@@ -32,7 +32,7 @@ mod tests {
     use crate::object::Message;
     use crate::error::BotError;
     use crate::input::add_mime;
-    use crate::input::FileUploader;
+    use crate::input::file;
     use crate::Bot;
     use futures::Future;
     use std::env::var;
@@ -50,7 +50,7 @@ mod tests {
 
         let bot = Bot::new(&api_key);
 
-        let mut uploader_res = FileUploader::new(file_name);
+        let mut uploader_res = file(file_name);
 
         if let Some(mime_str) = mime_string {
             uploader_res = uploader_res.and_then(add_mime(mime_str));

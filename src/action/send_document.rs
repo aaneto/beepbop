@@ -31,7 +31,7 @@ mod tests {
     use crate::input::SendDocument;
     use crate::input::add_mime;
     use crate::input::add_thumbnail;
-    use crate::input::FileUploader;
+    use crate::input::file;
     use crate::Bot;
     use std::env::var;
     use tokio::runtime::Runtime;
@@ -48,11 +48,11 @@ mod tests {
 
         let mut runtime = Runtime::new().expect("Unable to create a runtime");
 
-        let pupper_thumbnail = FileUploader::new("res/puppy.jpg")
+        let pupper_thumbnail = file("res/puppy.jpg")
             .and_then(add_mime("image/jpg"))
             .unwrap();
 
-        let text_file = FileUploader::new("res/some_text")
+        let text_file = file("res/some_text")
             .and_then(add_mime("text/plain"))
             .map(add_thumbnail(pupper_thumbnail))
             .unwrap();

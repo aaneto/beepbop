@@ -15,7 +15,7 @@
 //! ```rust
 //! use std::env::var;
 //! use beepbop::Bot;
-//! use beepbop::objects::User;
+//! use beepbop::object::User;
 //! use beepbop::tokio;
 //! use beepbop::futures::Future;
 //!
@@ -67,7 +67,6 @@
 pub mod object;
 pub mod input;
 pub mod action;
-pub mod bot;
 pub mod error;
 pub mod telegram_request;
 
