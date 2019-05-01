@@ -5,12 +5,12 @@ macro_rules! log_all {
     ($future_obj:expr) => {
         $future_obj
             .map(|data| {
-                println!("{:?}", data);
+                println!("{:#?}", data);
 
                 ()
             })
             .map_err(|err| {
-                println!("{:?}", err);
+                println!("{:#?}", err);
 
                 ()
             })
@@ -23,7 +23,7 @@ macro_rules! log_all {
 macro_rules! log_error {
     ($future_obj:expr) => {
         $future_obj.map_err(|err| {
-            println!("{:?}", err);
+            println!("{:#?}", err);
 
             ()
         })
@@ -36,7 +36,7 @@ macro_rules! log_error {
 macro_rules! log_data {
     ($future_obj:expr) => {
         $future_obj.map(|data| {
-            println!("{:?}", data);
+            println!("{:#?}", data);
 
             ()
         })

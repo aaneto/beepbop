@@ -1,7 +1,7 @@
 //! Integration tests for telegrambot.
-use crate::api::args::SendDocument;
-use crate::api::uploaders::FileUploader;
-use crate::api::Bot;
+use crate::input::SendDocument;
+use crate::input::FileUploader;
+use crate::Bot;
 use futures::Future;
 use std::env::var;
 use tokio::runtime::Runtime;
