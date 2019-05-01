@@ -88,7 +88,7 @@ There are some methods implemented and others in need of an implementation, here
 - [ ] unbanChatMember
 - [x] restrictChatMember
 - [x] promoteChatMember
-- [ ] exportChatInviteLink
+- [x] exportChatInviteLink
 - [x] setChatPhoto
 - [x] deleteChatPhoto
 - [x] setChatTitle

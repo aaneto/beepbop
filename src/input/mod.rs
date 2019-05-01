@@ -100,6 +100,7 @@ pub mod link_uploader;
 pub mod send_video;
 pub mod send_animation;
 pub mod send_video_note;
+pub mod export_chat_invite_link;
 
 pub use chat_id::*;
 pub use force_reply::*;
@@ -134,3 +135,4 @@ pub use link_uploader::*;
 pub use send_video::*;
 pub use send_animation::*;
 pub use send_video_note::*;
+pub use export_chat_invite_link::*;
