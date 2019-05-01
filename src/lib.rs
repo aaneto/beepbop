@@ -64,10 +64,21 @@
 //! );
 //!
 //! ```
-pub mod object;
-pub mod input;
+pub mod prelude {
+    pub use crate::error::BotError;
+    pub use crate::futures;
+    pub use crate::futures::Future;
+    pub use crate::input::*;
+    pub use crate::object::*;
+    pub use crate::reqwest;
+    pub use crate::tokio;
+    pub use crate::Bot;
+}
+
 pub mod action;
 pub mod error;
+pub mod input;
+pub mod object;
 pub mod telegram_request;
 
 mod macros;

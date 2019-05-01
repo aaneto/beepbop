@@ -12,52 +12,55 @@ Every action is supposed to be a function performed by the bot,
 returning a future with a reference to the bot and the data
 of the last action.
 
-```rust
+```rust, no_run
 use std::env::var;
-use telegrambot::prelude::*;
+use beepbop::prelude::*;
 
-let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
+fn main() {
+    let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
 
-let bot = Bot::new(&api_key);
+    let bot = Bot::new(&api_key);
 
-tokio::run(
-    bot
-        .get_me()
-        .map(|(_bot, me): (Bot, User)| println!("{:?}", me))
-        .map_err(|err| println("{:?}", err))
-);
+    tokio::run(
+        bot
+            .get_me()
+            .map(|(_bot, me): (Bot, User)| println!("{:?}", me))
+            .map_err(|err| println!("{:?}", err))
+    );
+}
 ```
 
 ## Multiple Actions
 
 Actions can be chained with the use of the and_then combinator, since they are futures.
 
-
-```rust
+```rust,no_run
 use std::env::var;
-use telegrambot::prelude::*;
+use beepbop::prelude::*;
 
-let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
-let chat_id = var("CHAT_ID").expect("Cannot find CHAT_ID in ENV");
+fn main() {
 
-let bot = Bot::new(&api_key);
+    let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
+    let chat_id = var("CHAT_ID").expect("Cannot find CHAT_ID in ENV");
 
-tokio::run(
-    bot
-        .get_chat(chat_id)
-        .and_then(|(bot, chat)| {
-            let file_id = chat.photo.unwrap().big_file_id;
+    let bot = Bot::new(&api_key);
 
-            bot.download_file(file_id)
-        })
-        .and_then(|(_, file_buffer)| {
-            let save_name = file_buffer.name.replace("/", "_");
+    tokio::run(
+        bot
+            .get_chat(chat_id)
+            .and_then(|(bot, chat)| {
+                let file_id = chat.photo.unwrap().big_file_id;
 
-            file_buffer.save_as(format!("res/{}", save_name))
-        })
-        .map_err(|err| println("{:?}", err))
-);
+                bot.download_file(file_id)
+            })
+            .and_then(|(_, file_buffer)| {
+                let save_name = file_buffer.name.replace("/", "_");
 
+                file_buffer.save_as(format!("res/{}", save_name))
+            })
+            .map_err(|err| println!("{:?}", err))
+    );
+}
 ```
 
 ## To Implement

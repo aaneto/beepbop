@@ -5,6 +5,7 @@ authors = ["Adilson Neto <almeidneto@gmail.com>"]
 edition = "2018"
 license = "MIT"
 description = "A telegram bot wrapper"
+build = "build.rs"
 
 
 [dependencies]
@@ -15,3 +16,9 @@ serde = "1.0.90"
 tokio = "0.1.19"
 futures = "0.1"
 optional_builder = {path = "optional_builder" }
+
+[build-dependencies]
+skeptic = "0.13"
+
+[dev-dependencies]
+skeptic = "0.13"
