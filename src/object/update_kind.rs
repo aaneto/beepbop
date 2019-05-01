@@ -1,6 +1,6 @@
 use serde_derive::Deserialize;
 
-use crate::objects::{
+use crate::object::{
     CallbackQuery,
     ChosenInlineResult,
     InlineQuery,

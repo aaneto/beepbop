@@ -1,7 +1,7 @@
 use futures::Future;
 
 use crate::input::GetUpdates;
-use crate::objects::Update;
+use crate::object::Update;
 use crate::error::BotError;
 use crate::Bot;
 use crate::telegram_request::{Method, TelegramRequest};

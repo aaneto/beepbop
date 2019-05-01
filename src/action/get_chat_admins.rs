@@ -1,7 +1,7 @@
 use futures::Future;
 
 use crate::input::ChatID;
-use crate::objects::ChatMember;
+use crate::object::ChatMember;
 use crate::error::BotError;
 use crate::Bot;
 use crate::telegram_request::{Method, TelegramRequest};

@@ -1,6 +1,6 @@
 use futures::Future;
 
-use crate::objects::User;
+use crate::object::User;
 use crate::error::BotError;
 use crate::Bot;
 use crate::telegram_request::{Method, TelegramRequest};

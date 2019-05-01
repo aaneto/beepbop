@@ -1,6 +1,6 @@
 use serde_derive::Deserialize;
 
-use crate::objects::{Location, User};
+use crate::object::{Location, User};
 
 #[derive(Debug, Deserialize)]
 pub struct InlineQuery {

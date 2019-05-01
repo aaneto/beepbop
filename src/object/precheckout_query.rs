@@ -1,6 +1,6 @@
 use serde_derive::Deserialize;
 
-use crate::objects::{OrderInfo, User};
+use crate::object::{OrderInfo, User};
 
 #[derive(Debug, Deserialize)]
 pub struct PrecheckoutQuery {

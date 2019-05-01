@@ -1,6 +1,6 @@
 use serde_derive::Deserialize;
 
-use crate::objects::{ShippingAddress, User};
+use crate::object::{ShippingAddress, User};
 
 #[derive(Debug, Deserialize)]
 pub struct ShippingQuery {

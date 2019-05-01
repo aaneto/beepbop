@@ -1,6 +1,6 @@
 use serde_derive::Deserialize;
 
-use crate::objects::{ChatPhoto, RawMessage};
+use crate::object::{ChatPhoto, RawMessage};
 
 #[derive(Debug, Deserialize)]
 pub struct Chat {

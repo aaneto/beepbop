@@ -1,7 +1,7 @@
 use futures::Future;
 
 use crate::input::SendVoice;
-use crate::objects::Message;
+use crate::object::Message;
 use crate::error::BotError;
 use crate::input::Uploader;
 use crate::Bot;

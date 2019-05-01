@@ -1,7 +1,7 @@
 use futures::Future;
 
 use crate::input::SendContact;
-use crate::objects::Message;
+use crate::object::Message;
 use crate::error::BotError;
 use crate::Bot;
 use crate::telegram_request::{Method, TelegramRequest};

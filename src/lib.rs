@@ -64,7 +64,7 @@
 //! );
 //!
 //! ```
-pub mod objects;
+pub mod object;
 pub mod input;
 pub mod action;
 pub mod bot;
@@ -90,7 +90,7 @@ use reqwest::r#async::Client;
 use reqwest::r#async::Response;
 
 use crate::error::BotError;
-use crate::objects::FileBuffer;
+use crate::object::FileBuffer;
 
 pub type BotResult<T> = Result<T, BotError>;
 

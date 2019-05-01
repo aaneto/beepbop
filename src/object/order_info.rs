@@ -1,6 +1,6 @@
 use serde_derive::Deserialize;
 
-use crate::objects::LabeledPrice;
+use crate::object::LabeledPrice;
 
 #[derive(Debug, Deserialize)]
 pub struct OrderInfo {

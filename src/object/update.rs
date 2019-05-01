@@ -1,6 +1,6 @@
 use serde_derive::Deserialize;
 
-use crate::objects::UpdateKind;
+use crate::object::UpdateKind;
 
 #[derive(Debug, Deserialize)]
 pub struct Update {

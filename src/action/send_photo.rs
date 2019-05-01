@@ -1,7 +1,7 @@
 use futures::Future;
 
 use crate::input::SendPhoto;
-use crate::objects::Message;
+use crate::object::Message;
 use crate::error::BotError;
 use crate::input::Uploader;
 use crate::Bot;
@@ -29,7 +29,7 @@ impl Bot {
 #[cfg(test)]
 mod tests {
     use crate::input::SendPhoto;
-    use crate::objects::Message;
+    use crate::object::Message;
     use crate::error::BotError;
     use crate::input::add_mime;
     use crate::input::FileUploader;

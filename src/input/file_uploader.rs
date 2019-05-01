@@ -6,7 +6,7 @@ use reqwest::r#async::multipart::Part;
 use crate::input::IdPostUploader;
 use crate::input::Uploader;
 use crate::input::UploaderError;
-use crate::objects::FileBuffer;
+use crate::object::FileBuffer;
 use crate::telegram_request::TelegramRequest;
 
 /// The FileUploader is an proxy object

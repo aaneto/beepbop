@@ -1,7 +1,7 @@
 use futures::Future;
 
 use crate::input::GetFile;
-use crate::objects::FileInfo;
+use crate::object::FileInfo;
 use crate::error::BotError;
 use crate::Bot;
 use crate::telegram_request::{Method, TelegramRequest};

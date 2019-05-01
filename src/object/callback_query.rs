@@ -1,6 +1,6 @@
 use serde_derive::Deserialize;
 
-use crate::objects::{Message, User};
+use crate::object::{Message, User};
 
 #[derive(Debug, Deserialize)]
 pub struct CallbackQuery {
