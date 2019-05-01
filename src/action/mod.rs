@@ -19,6 +19,7 @@ pub mod send_message;
 pub mod send_photo;
 pub mod send_voice;
 pub mod send_video;
+pub mod send_animation;
 pub mod set_chat_description;
 pub mod set_chat_photo;
 pub mod set_chat_sticker_set;

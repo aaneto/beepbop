@@ -72,7 +72,7 @@ There are some methods implemented and others in need of an implementation, here
 - [x] sendAudio
 - [x] sendDocument
 - [x] sendVideo
-- [ ] sendAnimation
+- [x] sendAnimation
 - [x] sendVoice
 - [ ] sendVideoNote
 - [ ] sendMediaGroup
