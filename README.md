@@ -53,93 +53,54 @@ tokio::run(
         .and_then(|(_, file_buffer)| {
             let save_name = file_buffer.name.replace("/", "_");
 
-            file_buffer.save_as(format("res/{}", save_name))
+            file_buffer.save_as(format!("res/{}", save_name))
         })
         .map_err(|err| println("{:?}", err))
 );
 
 ```
 
-### Methods
+## To Implement
 
-There are some methods implemented and others in need of an implementation, here is the list:
+There are some actions/methods in need of implementation, those are:
 
-- [x] getMe
-- [x] getUpdates
-- [x] sendMessage
-- [x] forwardMessage
-- [x] sendPhoto
-- [x] sendAudio
-- [x] sendDocument
-- [x] sendVideo
-- [x] sendAnimation
-- [x] sendVoice
-- [x] sendVideoNote
-- [ ] sendMediaGroup
-- [x] sendLocation
-- [ ] editMessageLiveLocation
-- [ ] stopMessageLiveLocation
-- [ ] sendVenue
-- [x] sendContact
-- [ ] sendChatAction
-- [ ] getUserProfilePhotos
-- [x] getFile
-- [ ] kickChatMember
-- [ ] unbanChatMember
-- [x] restrictChatMember
-- [x] promoteChatMember
-- [x] exportChatInviteLink
-- [x] setChatPhoto
-- [x] deleteChatPhoto
-- [x] setChatTitle
-- [x] setChatDescription
-- [x] pinChatMessage
-- [x] unpinChatMessage
-- [x] leaveChat
-- [x] getChat
-- [x] getChatAdministrators
-- [x] getChatMembersCount
-- [x] getChatMember
-- [x] setChatStickerSet
-- [x] deleteChatStickerSet
-- [ ] answerCallbackQuery
+- sendMediaGroup
+- editMessageLiveLocation
+- stopMessageLiveLocation
+- sendVenue
+- sendChatAction
+- getUserProfilePhotos
+- kickChatMember
+- unbanChatMember
+- answerCallbackQuery
 
-There is also functionalities not currently implemented, such as:
+The webhook functionality also lacks an implementation:
 
-- [ ] setWebhook
-- [ ] deleteWebhook
-- [ ] getWebhookInfo
+- setWebhook
+- deleteWebhook
+- getWebhookInfo
 
-These are for getting updates via a webhook and involve setting up a tcp listener that reacts to responses with new updates. 
+Other functionality includes:
 
-Since this lib aims to be disjoint of the robot actual logic, only creating, deleting and getting info about the webhook are necessary for an implementation to be considered done.
-
-
-
-And last there are the additional stuff that involve:
-
-
-
-- [ ] Payments
-- [ ] Passport
-- [ ] Stickers
-- [ ] Games
-- [ ] Inline Handling
+- Payments
+- Passport
+- Stickers
+- Games
+- Inline Handling
 
 
 
 ### Contributing
 
-All kinds of Pull Requests are welcome, from implementations to design suggestions. Just fork the code and create a PR named after the feature to be added.
-
+All kinds of suggestions are accepted, just note that this repository is a work in progress.
 
 ### Running Tests
 
 There is a dockerfile with all information needed for tests. Tests are organized as such:
 
 - Unit tests are on the same file as the source file.
-- Destructive actions, such as kicking a member or leaving a chat, are perferably tested on integration
+- Destructive actions, such as kicking a member or leaving a chat are perferably tested on integration
 tests. Those should always be ignored by default.
 
 To execute tests, build and run the container created by the Dockerfile, if docker is not available,
-one can just read the file to set the environment variables and then run cargo test normally.
+one can just read the file to set the appropriate environment variables and then run cargo test normally.
