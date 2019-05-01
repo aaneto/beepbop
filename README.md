@@ -74,7 +74,7 @@ There are some methods implemented and others in need of an implementation, here
 - [x] sendVideo
 - [x] sendAnimation
 - [x] sendVoice
-- [ ] sendVideoNote
+- [x] sendVideoNote
 - [ ] sendMediaGroup
 - [x] sendLocation
 - [ ] editMessageLiveLocation

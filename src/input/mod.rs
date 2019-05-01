@@ -99,6 +99,7 @@ pub mod id_uploader;
 pub mod link_uploader;
 pub mod send_video;
 pub mod send_animation;
+pub mod send_video_note;
 
 pub use chat_id::*;
 pub use force_reply::*;
@@ -132,3 +133,4 @@ pub use id_uploader::*;
 pub use link_uploader::*;
 pub use send_video::*;
 pub use send_animation::*;
+pub use send_video_note::*;
