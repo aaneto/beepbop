@@ -29,3 +29,4 @@ pub mod set_chat_sticker_set;
 pub mod set_chat_title;
 pub mod unpin_message;
 pub mod get_user_profile_photos;
+pub mod send_chat_action;

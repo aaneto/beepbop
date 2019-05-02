@@ -102,6 +102,8 @@ pub mod set_chat_description;
 pub mod set_chat_sticker_set;
 pub mod set_chat_title;
 pub mod get_user_profile_photos;
+pub mod action;
+pub mod send_chat_action;
 
 pub use chat_id::*;
 pub use export_chat_invite_link::*;
@@ -139,3 +141,5 @@ pub use set_chat_sticker_set::*;
 pub use set_chat_title::*;
 pub use get_user_profile_photos::*;
 pub use send_venue::*;
+pub use action::*;
+pub use send_chat_action::*;
