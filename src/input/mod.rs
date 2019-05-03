@@ -105,6 +105,7 @@ pub mod get_user_profile_photos;
 pub mod action;
 pub mod send_chat_action;
 pub mod kick_chat_member;
+pub mod unban_chat_member;
 
 pub use chat_id::*;
 pub use export_chat_invite_link::*;
@@ -145,3 +146,4 @@ pub use send_venue::*;
 pub use action::*;
 pub use send_chat_action::*;
 pub use kick_chat_member::*;
+pub use unban_chat_member::*;

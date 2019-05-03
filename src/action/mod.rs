@@ -31,3 +31,4 @@ pub mod unpin_message;
 pub mod get_user_profile_photos;
 pub mod send_chat_action;
 pub mod kick_chat_member;
+pub mod unban_chat_member;
