@@ -30,3 +30,4 @@ pub mod set_chat_title;
 pub mod unpin_message;
 pub mod get_user_profile_photos;
 pub mod send_chat_action;
+pub mod kick_chat_member;
