@@ -17,11 +17,8 @@ pub struct SendDocumentQuery {
 
 #[optional_builder]
 #[derive(Default, Debug)]
-pub struct SendDocument<U>
-where
-    U: Uploader + Default,
-{
-    pub document: U,
+pub struct SendDocument {
+    pub document: Uploader,
     pub chat_id: ChatID,
     pub caption: Option<String>,
     pub parse_mode: Option<String>,
@@ -30,22 +27,20 @@ where
     pub reply_markup: Option<ReplyMarkup>,
 }
 
-impl<U> SendDocument<U>
-where
-    U: Uploader + Default,
-{
-    pub fn new<ID>(chat_id: ID, document: U) -> Self
+impl SendDocument {
+    pub fn new<ID, U>(chat_id: ID, document: U) -> Self
     where
         ID: Into<ChatID>,
+        U: Into<Uploader>
     {
         SendDocument {
-            document,
+            document: document.into(),
             chat_id: chat_id.into(),
             ..Default::default()
         }
     }
 
-    pub fn split(self) -> (SendDocumentQuery, U) {
+    pub fn split(self) -> (SendDocumentQuery, Uploader) {
         let query = SendDocumentQuery {
             chat_id: self.chat_id,
             caption: self.caption,

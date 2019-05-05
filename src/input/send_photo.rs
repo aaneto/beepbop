@@ -17,11 +17,8 @@ pub struct SendPhotoQuery {
 
 #[optional_builder]
 #[derive(Debug, Default)]
-pub struct SendPhoto<U>
-where
-    U: Uploader + Default,
-{
-    pub photo_uploader: U,
+pub struct SendPhoto {
+    pub photo_uploader: Uploader,
     pub chat_id: ChatID,
     pub caption: Option<String>,
     pub parse_mode: Option<String>,
@@ -30,19 +27,20 @@ where
     pub reply_markup: Option<ReplyMarkup>,
 }
 
-impl<U> SendPhoto<U>
-where
-    U: Uploader + Default,
-{
-    pub fn new<ID: Into<ChatID>>(chat_id: ID, photo_uploader: U) -> Self {
+impl SendPhoto {
+    pub fn new<ID, U>(chat_id: ID, photo_uploader: U) -> Self
+    where
+        ID: Into<ChatID>,
+        U: Into<Uploader>
+    {
         SendPhoto {
-            photo_uploader,
+            photo_uploader: photo_uploader.into(),
             chat_id: chat_id.into(),
             ..Default::default()
         }
     }
 
-    pub fn split(self) -> (SendPhotoQuery, U) {
+    pub fn split(self) -> (SendPhotoQuery, Uploader) {
         let query = SendPhotoQuery {
             chat_id: self.chat_id,
             caption: self.caption,

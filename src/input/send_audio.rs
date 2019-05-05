@@ -7,12 +7,9 @@ use crate::input::Uploader;
 
 #[optional_builder]
 #[derive(Debug, Default)]
-pub struct SendAudio<T>
-where
-    T: Uploader + Default,
-{
+pub struct SendAudio {
     pub chat_id: ChatID,
-    pub voice: T,
+    pub voice: Uploader,
     pub caption: Option<String>,
     pub parse_mode: Option<String>,
     // Telegram Docs specifies this as integer(?).
@@ -38,19 +35,20 @@ pub struct SendAudioQuery {
     pub reply_markup: Option<ReplyMarkup>,
 }
 
-impl<T: Uploader> SendAudio<T>
-where
-    T: Uploader + Default,
-{
-    pub fn new<ID: Into<ChatID>>(chat_id: ID, voice: T) -> Self {
+impl SendAudio {
+    pub fn new<ID, U>(chat_id: ID, voice: U) -> Self
+    where
+        ID: Into<ChatID>,
+        U: Into<Uploader>
+    {
         Self {
             chat_id: chat_id.into(),
-            voice,
+            voice: voice.into(),
             ..Default::default()
         }
     }
 
-    pub fn split(self) -> (SendAudioQuery, T) {
+    pub fn split(self) -> (SendAudioQuery, Uploader) {
         let query = SendAudioQuery {
             chat_id: self.chat_id,
             caption: self.caption,

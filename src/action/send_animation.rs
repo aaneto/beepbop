@@ -2,15 +2,14 @@ use futures::Future;
 
 use crate::error::BotError;
 use crate::input::SendAnimation;
-use crate::input::Uploader;
 use crate::object::Message;
 use crate::telegram_request::{Method, TelegramRequest};
 use crate::Bot;
 
 impl Bot {
-    pub fn send_animation<U: Uploader + Default>(
+    pub fn send_animation(
         self,
-        send_animation: SendAnimation<U>,
+        send_animation: SendAnimation,
     ) -> impl Future<Item = (Self, Message), Error = BotError> {
         let (query, uploader) = send_animation.split();
 

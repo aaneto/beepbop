@@ -20,11 +20,8 @@ pub struct SendAnimationQuery {
 
 #[optional_builder]
 #[derive(Default, Debug)]
-pub struct SendAnimation<U>
-where
-    U: Uploader + Default,
-{
-    pub animation: U,
+pub struct SendAnimation {
+    pub animation: Uploader,
     pub chat_id: ChatID,
     pub caption: Option<String>,
     pub parse_mode: Option<String>,
@@ -36,22 +33,20 @@ where
     pub height: Option<u32>,
 }
 
-impl<U> SendAnimation<U>
-where
-    U: Uploader + Default,
-{
-    pub fn new<ID>(chat_id: ID, animation: U) -> Self
+impl SendAnimation {
+    pub fn new<ID, U>(chat_id: ID, animation: U) -> Self
     where
         ID: Into<ChatID>,
+        U: Into<Uploader>
     {
         SendAnimation {
-            animation,
+            animation: animation.into(),
             chat_id: chat_id.into(),
             ..Default::default()
         }
     }
 
-    pub fn split(self) -> (SendAnimationQuery, U) {
+    pub fn split(self) -> (SendAnimationQuery, Uploader) {
         let query = SendAnimationQuery {
             chat_id: self.chat_id,
             caption: self.caption,

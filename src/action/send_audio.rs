@@ -2,15 +2,14 @@ use futures::Future;
 
 use crate::error::BotError;
 use crate::input::SendAudio;
-use crate::input::Uploader;
 use crate::object::Message;
 use crate::telegram_request::{Method, TelegramRequest};
 use crate::Bot;
 
 impl Bot {
-    pub fn send_audio<T: Uploader + Default>(
+    pub fn send_audio(
         self,
-        send_audio: SendAudio<T>,
+        send_audio: SendAudio,
     ) -> impl Future<Item = (Self, Message), Error = BotError> {
         let (query, voice) = send_audio.split();
 
@@ -30,7 +29,6 @@ mod tests {
     use tokio::runtime::Runtime;
 
     #[test]
-    #[ignore]
     fn test_send_audio() {
         let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
         let chat_id: i64 = var("CHAT_ID")

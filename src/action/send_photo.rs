@@ -13,9 +13,9 @@ impl Bot {
     /// Photos can be uploaded by Id, Url and Post
     /// methods. Note that chat photo id's are only
     /// usable for downloading a chat photo, not here.
-    pub fn send_photo<U: Uploader + Default>(
+    pub fn send_photo(
         self,
-        send_photo: SendPhoto<U>,
+        send_photo: SendPhoto,
     ) -> impl Future<Item = (Self, Message), Error = BotError> {
         let (query, uploader) = send_photo.split();
 

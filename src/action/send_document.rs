@@ -2,15 +2,14 @@ use futures::Future;
 
 use crate::error::BotError;
 use crate::input::SendDocument;
-use crate::input::Uploader;
 use crate::object::Message;
 use crate::telegram_request::{Method, TelegramRequest};
 use crate::Bot;
 
 impl Bot {
-    pub fn send_document<U: Uploader + Default>(
+    pub fn send_document(
         self,
-        send_document: SendDocument<U>,
+        send_document: SendDocument,
     ) -> impl Future<Item = (Self, Message), Error = BotError> {
         let (query, uploader) = send_document.split();
 

@@ -3,11 +3,8 @@ use std::path::PathBuf;
 use futures::future::Future;
 use reqwest::r#async::multipart::Part;
 
-use crate::input::IdPostUploader;
-use crate::input::Uploader;
 use crate::input::UploaderError;
 use crate::object::FileBuffer;
-use crate::telegram_request::TelegramRequest;
 
 /// The FileUploader is an proxy object
 /// for a FileUploader Future:
@@ -19,17 +16,9 @@ use crate::telegram_request::TelegramRequest;
 /// It is possible to add a thumbnail to this File.
 #[derive(Debug)]
 pub struct FileUploader {
-    part: Part,
-    thumbnail: Option<Part>,
-}
-
-impl Default for FileUploader {
-    fn default() -> FileUploader {
-        FileUploader {
-            part: Part::bytes(vec![]).file_name("empty"),
-            thumbnail: None,
-        }
-    }
+    pub part: Part,
+    pub thumbnail: Option<Part>,
+    pub file_name: String,
 }
 
 /// Add a mime type to a FileUploader.
@@ -92,28 +81,33 @@ impl FileUploader {
 
         match file_name {
             Ok(name) => Ok(Self {
-                part: part.file_name(name),
+                part: part.file_name(name.clone()),
                 thumbnail: None,
+                file_name: name,
             }),
             Err(err) => Err(err),
         }
     }
 
     pub fn from_bytes(name: &str, bytes: Vec<u8>) -> Self {
-        let part = Part::bytes(bytes).file_name(name.to_owned());
+        let file_name = name.to_owned();
+        let part = Part::bytes(bytes).file_name(file_name.clone());
 
         Self {
             part,
             thumbnail: None,
+            file_name,
         }
     }
 
     pub fn from_file(file: FileBuffer) -> Self {
-        let part = Part::bytes(file.data).file_name(file.name.replace("/", "_").to_owned());
+        let file_name = file.name.replace("/", "_").to_owned();
+        let part = Part::bytes(file.data).file_name(file_name.clone());
 
         Self {
             part,
             thumbnail: None,
+            file_name
         }
     }
 
@@ -134,18 +128,3 @@ impl FileUploader {
         self
     }
 }
-
-impl Uploader for FileUploader {
-    /// Upload itself into the request by using multipart form data.
-    fn upload_into(self, tag: &str, builder: TelegramRequest) -> TelegramRequest {
-        let mut request = builder.with_form_part(tag, self.part);
-
-        if let Some(thumbnail) = self.thumbnail {
-            request = request.with_form_part("thumb", thumbnail);
-        }
-
-        request
-    }
-}
-
-impl IdPostUploader for FileUploader {}

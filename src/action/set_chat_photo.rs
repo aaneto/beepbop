@@ -14,7 +14,7 @@ impl Bot {
     ) -> impl Future<Item = (Self, bool), Error = BotError> {
         TelegramRequest::new(Method::POST, self.get_route(&"setChatPhoto"), self)
             .with_query(chat_id.into())
-            .with_uploader("photo", photo)
+            .with_uploader("photo", photo.into())
             .execute()
     }
 }

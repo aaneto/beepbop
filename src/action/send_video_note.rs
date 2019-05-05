@@ -2,15 +2,14 @@ use futures::Future;
 
 use crate::error::BotError;
 use crate::input::SendVideoNote;
-use crate::input::Uploader;
 use crate::object::Message;
 use crate::telegram_request::{Method, TelegramRequest};
 use crate::Bot;
 
 impl Bot {
-    pub fn send_video_note<U: Uploader + Default>(
+    pub fn send_video_note(
         self,
-        send_video_note: SendVideoNote<U>,
+        send_video_note: SendVideoNote,
     ) -> impl Future<Item = (Self, Message), Error = BotError> {
         let (query, uploader) = send_video_note.split();
 

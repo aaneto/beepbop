@@ -21,11 +21,8 @@ pub struct SendVideoQuery {
 
 #[optional_builder]
 #[derive(Default, Debug)]
-pub struct SendVideo<U>
-where
-    U: Uploader + Default,
-{
-    pub video: U,
+pub struct SendVideo {
+    pub video: Uploader,
     pub chat_id: ChatID,
     pub caption: Option<String>,
     pub parse_mode: Option<String>,
@@ -38,22 +35,20 @@ where
     pub height: Option<u32>,
 }
 
-impl<U> SendVideo<U>
-where
-    U: Uploader + Default,
-{
-    pub fn new<ID>(chat_id: ID, video: U) -> Self
+impl SendVideo {
+    pub fn new<ID, U>(chat_id: ID, video: U) -> Self
     where
         ID: Into<ChatID>,
+        U: Into<Uploader>
     {
         SendVideo {
-            video,
+            video: video.into(),
             chat_id: chat_id.into(),
             ..Default::default()
         }
     }
 
-    pub fn split(self) -> (SendVideoQuery, U) {
+    pub fn split(self) -> (SendVideoQuery, Uploader) {
         let query = SendVideoQuery {
             chat_id: self.chat_id,
             caption: self.caption,

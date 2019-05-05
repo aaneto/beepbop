@@ -42,14 +42,86 @@ impl Error for UploaderError {
 /// (Max 10MB for photos and 50MB for other content)
 ///
 /// Filed and URL are just sent by query while POST is a multipart form.
-pub trait Uploader: std::fmt::Debug {
-    /// Get a RequestBuilder and add self to it as query or multiform data.
-    fn upload_into(self, tag: &str, builder: TelegramRequest) -> TelegramRequest;
+#[derive(Debug)]
+pub enum Uploader {
+    File(FileUploader),
+    Url(UrlUploader),
+    Id(IdUploader),
+    Empty
 }
 
-/// A trait for when we want to upload
-/// either by Id or by file.
-pub trait IdPostUploader: Uploader {}
+#[derive(Debug)]
+pub struct UrlUploader(String);
+#[derive(Debug)]
+pub struct IdUploader(String);
+
+impl Uploader {
+    /// Get a RequestBuilder and add self to it as query or multiform data.
+    pub fn upload_into(self, tag: &str, builder: TelegramRequest) -> TelegramRequest {
+        match self {
+            Uploader::File(file_uploader) => {
+                let mut request = builder.with_form_part(tag, file_uploader.part);
+
+                if let Some(thumbnail) = file_uploader.thumbnail {
+                    request = request.with_form_part("thumb", thumbnail);
+                }
+
+                request
+            },
+            Uploader::Url(url) => {
+                builder.with_query(&[(tag, url.0)])
+            },
+            Uploader::Id(id) => {
+                builder.with_query(&[(tag, id.0)])
+            },
+            Uploader::Empty => (builder)
+        }
+    }
+}
+
+impl Default for Uploader {
+    fn default() -> Self {
+        Uploader::Empty
+    }
+}
+
+impl From<FileUploader> for Uploader {
+    fn from(file_uploader: FileUploader) -> Uploader {
+        Uploader::File(file_uploader)
+    }
+}
+
+impl From<UrlUploader> for Uploader {
+    fn from(url_uploader: UrlUploader) -> Uploader {
+        Uploader::Url(url_uploader)
+    }
+}
+
+impl From<IdUploader> for Uploader {
+    fn from(id_uploader: IdUploader) -> Uploader {
+        Uploader::Id(id_uploader)
+    }
+}
+
+impl From<FileUploader> for IdFileUploader {
+    fn from(file_uploader: FileUploader) -> IdFileUploader {
+        IdFileUploader(Uploader::File(file_uploader))
+    }
+}
+
+impl From<IdUploader> for IdFileUploader {
+    fn from(id_uploader: IdUploader) -> IdFileUploader {
+        IdFileUploader(Uploader::Id(id_uploader))
+    }
+}
+
+pub struct IdFileUploader(Uploader);
+
+impl From<IdFileUploader> for Uploader {
+    fn from(id_post_uploader: IdFileUploader) -> Uploader {
+        id_post_uploader.0
+    }
+}
 
 pub fn file<P>(path: P) -> Result<FileUploader, UploaderError>
 where
@@ -58,12 +130,12 @@ where
     FileUploader::new(path)
 }
 
-pub fn file_id(id: &str) -> IdUploader {
-    IdUploader::new(id)
+pub fn file_id<S: ToString>(id: S) -> IdUploader {
+    IdUploader(id.to_string())
 }
 
-pub fn file_link(link: &str) -> LinkUploader {
-    LinkUploader::new(link)
+pub fn file_url<S: ToString>(url: S) -> UrlUploader {
+    UrlUploader(url.to_string())
 }
 
 pub mod chat_id;
@@ -75,12 +147,10 @@ pub mod get_chat;
 pub mod get_chat_member;
 pub mod get_file;
 pub mod get_updates;
-pub mod id_uploader;
 pub mod inline_keyboard_button;
 pub mod inline_keyboard_button_message;
 pub mod inline_keyboard_markup;
 pub mod keyboard_button;
-pub mod link_uploader;
 pub mod pin_message;
 pub mod promote_chat_member;
 pub mod reply_board_markup;
@@ -116,12 +186,10 @@ pub use get_chat::*;
 pub use get_chat_member::*;
 pub use get_file::*;
 pub use get_updates::*;
-pub use id_uploader::*;
 pub use inline_keyboard_button::*;
 pub use inline_keyboard_button_message::*;
 pub use inline_keyboard_markup::*;
 pub use keyboard_button::*;
-pub use link_uploader::*;
 pub use pin_message::*;
 pub use promote_chat_member::*;
 pub use reply_board_markup::*;

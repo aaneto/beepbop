@@ -2,15 +2,14 @@ use futures::Future;
 
 use crate::error::BotError;
 use crate::input::SendVoice;
-use crate::input::Uploader;
 use crate::object::Message;
 use crate::telegram_request::{Method, TelegramRequest};
 use crate::Bot;
 
 impl Bot {
-    pub fn send_voice<T: Uploader + Default>(
+    pub fn send_voice(
         self,
-        send_voice: SendVoice<T>,
+        send_voice: SendVoice,
     ) -> impl Future<Item = (Self, Message), Error = BotError> {
         let (query, voice) = send_voice.split();
 
