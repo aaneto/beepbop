@@ -14,22 +14,23 @@ use crate::input::Uploader;
 /// about a video used within an MediaGroup. the media
 /// String is a name granted by the MediaGroup object.
 pub struct MediaVideo {
-    pub r#type: String,
-    pub media: String,
+    r#type: String,
+    media: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub thumb: Option<String>,
+    #[optional_builder(skip)]
+    thumb: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub caption: Option<String>,
+    caption: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub parse_mode: Option<String>,
+    parse_mode: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub width: Option<u32>,
+    width: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub height: Option<u32>,
+    height: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub duration: Option<u32>,
+    duration: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub supports_streaming: Option<bool>,
+    supports_streaming: Option<bool>,
 }
 
 #[optional_builder]
@@ -48,65 +49,77 @@ pub struct MediaPhoto {
 
 #[derive(Debug, Serialize)]
 #[serde(untagged)]
-pub enum MediaEntry {
+/// The MediaEntry Enum is a container type
+/// for both MediaVideo and MediaPhoto.
+/// 
+/// This is a detail implementation of MediaGroup
+/// and probably should not be used directly.
+enum MediaEntry {
     Video(MediaVideo),
     Photo(MediaPhoto),
 }
 
-#[optional_builder]
 #[derive(Default, Debug, Serialize)]
+/// The MediaGroupQuery is a struct with
+/// all queryable fields on MediaGroup,
+/// it is a implementation detail of MediaGroup
+/// and probably should not be used directly.
 pub struct MediaGroupQuery {
-    pub chat_id: ChatID,
+    chat_id: ChatID,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub disable_notification: Option<bool>,
+    disable_notification: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reply_to_message_id: Option<i64>,
+    reply_to_message_id: Option<i64>,
 }
 
 #[derive(Debug)]
+/// The Attachment is a uploader associated
+/// with a name, this name is usefull because
+/// uploading MediaGroup's includes having to
+/// remember what files where uploaded under
+/// what name.
+/// 
+/// This struct is an implementation detail of
+/// MediaGroup and should not be used directly.
 pub struct Attachment {
     pub uploader: Uploader,
     pub name: String,
 }
 
-#[derive(Debug, Default)]
+#[derive(Default, Debug)]
+/// The MediaGroup is a container
+/// with all the information necessary
+/// to send a MediaGroup to telegram.
 pub struct MediaGroup {
-    pub chat_id: ChatID,
-    pub media: Vec<MediaEntry>,
+    pub query: MediaGroupQuery,
     pub media_encoded: String,
-    pub disable_notification: Option<bool>,
-    pub reply_to_message_id: Option<i64>,
-    pub attachments: Vec<Attachment>,
+    pub attachments: Vec<Attachment>
+}
+
+#[optional_builder]
+#[derive(Default, Debug)]
+pub struct MediaGroupBuilder {
+    chat_id: ChatID,
+    media: Vec<MediaEntry>,
+    disable_notification: Option<bool>,
+    reply_to_message_id: Option<i64>,
+    attachments: Vec<Attachment>,
 }
 
 impl MediaGroup {
+    /// Create a new MediaGroupBuilder
     pub fn build<ID: Into<ChatID>>(chat_id: ID) -> MediaGroupBuilder {
-        let media = MediaGroup {
+        MediaGroupBuilder {
             chat_id: chat_id.into(),
             ..Default::default()
-        };
-
-        MediaGroupBuilder { builder: media }
+        }
     }
-
-    pub fn split(self) -> (MediaGroupQuery, String, Vec<Attachment>) {
-        let query = MediaGroupQuery {
-            chat_id: self.chat_id,
-            disable_notification: self.disable_notification,
-            reply_to_message_id: self.reply_to_message_id,
-        };
-
-        (query, self.media_encoded, self.attachments)
-    }
-}
-
-pub struct MediaGroupBuilder {
-    builder: MediaGroup,
 }
 
 impl MediaGroupBuilder {
-    pub fn finish(mut self) -> Result<MediaGroup, BotError> {
-        let number_of_medias = self.builder.media.len();
+    /// Finish the building of the MediaGroup.
+    pub fn finish(self) -> Result<MediaGroup, BotError> {
+        let number_of_medias = self.media.len();
 
         if number_of_medias > 10 || number_of_medias < 2 {
             return Err(BotError::InvalidMediaGroup(format!(
@@ -115,9 +128,17 @@ impl MediaGroupBuilder {
             )));
         }
 
-        match serde_json::to_string(&self.builder.media) {
+        match serde_json::to_string(&self.media) {
             Ok(media_encoded) => {
-                self.builder.media_encoded = media_encoded;
+                Ok(MediaGroup {
+                    media_encoded,
+                    query: MediaGroupQuery {
+                        chat_id: self.chat_id,
+                        disable_notification: self.disable_notification,
+                        reply_to_message_id: self.reply_to_message_id,
+                    },
+                    attachments: self.attachments
+                })
             }
             Err(err) => {
                 return Err(BotError::InvalidMediaGroup(format!(
@@ -125,12 +146,31 @@ impl MediaGroupBuilder {
                     err.description()
                 )));
             }
-        };
-
-        Ok(self.builder)
+        }
     }
 
-    pub fn build_photo<U, F>(mut self, uploader: U, func: F) -> Self
+    /// Add a new photo to the MediaGroup, the photo
+    /// will be created from the file provided.
+    pub fn add_photo<U>(self, uploader: U) -> Self
+    where
+        U: Into<Uploader>,
+    {
+        // Add photo without modifying the output photo.
+        self.add_photo_with(uploader, std::convert::identity)
+    }
+
+    /// Add a new video to the MediaGroup, the video
+    /// will be created from the file provided.
+    pub fn add_video<U>(self, uploader: U, thumbnail: Option<FileUploader>) -> Self
+    where
+        U: Into<Uploader>,
+    {
+        self.add_video_with(uploader, thumbnail, std::convert::identity)
+    }
+
+    /// Add a new photo to the MediaGroup but with an edit_function
+    /// to edit some details of the photo after its creation.
+    pub fn add_photo_with<U, F>(mut self, uploader: U, edit_function: F) -> Self
     where
         U: Into<Uploader>,
         F: Fn(MediaPhoto) -> MediaPhoto,
@@ -143,8 +183,8 @@ impl MediaGroupBuilder {
                     ..Default::default()
                 };
 
-                self.builder.media.push(MediaEntry::Photo(func(photo)));
-                self.builder.attachments.push(Attachment {
+                self.media.push(MediaEntry::Photo(edit_function(photo)));
+                self.attachments.push(Attachment {
                     name: file_uploader.file_name.clone(),
                     uploader: file_uploader.into(),
                 });
@@ -156,7 +196,7 @@ impl MediaGroupBuilder {
                     ..Default::default()
                 };
 
-                self.builder.media.push(MediaEntry::Photo(func(photo)));
+                self.media.push(MediaEntry::Photo(edit_function(photo)));
             }
             Uploader::Url(url) => {
                 let photo = MediaPhoto {
@@ -165,7 +205,7 @@ impl MediaGroupBuilder {
                     ..Default::default()
                 };
 
-                self.builder.media.push(MediaEntry::Photo(func(photo)));
+                self.media.push(MediaEntry::Photo(edit_function(photo)));
             }
             Uploader::Empty => (),
         }
@@ -173,18 +213,13 @@ impl MediaGroupBuilder {
         self
     }
 
-    pub fn add_photo<U>(self, uploader: U) -> Self
-    where
-        U: Into<Uploader>,
-    {
-        self.build_photo(uploader, std::convert::identity)
-    }
-
-    pub fn build_video<U, F>(
+    /// Add a new video to the MediaGroup, but with an edit_function
+    /// to edit some details of the photo after its creation.
+    pub fn add_video_with<U, F>(
         mut self,
         uploader: U,
         thumbnail: Option<FileUploader>,
-        func: F,
+        edit_function: F,
     ) -> Self
     where
         U: Into<Uploader>,
@@ -199,17 +234,19 @@ impl MediaGroupBuilder {
                 };
 
                 if let Some(thumb) = thumbnail {
-                    video = video.with_thumb(thumb.file_name.clone());
+                    // with_thumb method is not created to avoid
+                    // the user from using it inside the build edit_function closure.
+                    video.thumb = Some(format!("attach://{}", thumb.file_name));
 
-                    self.builder.attachments.push(Attachment {
+                    self.attachments.push(Attachment {
                         name: thumb.file_name.clone(),
                         uploader: thumb.into(),
                     });
                 };
 
-                self.builder.media.push(MediaEntry::Video(func(video)));
+                self.media.push(MediaEntry::Video(edit_function(video)));
 
-                self.builder.attachments.push(Attachment {
+                self.attachments.push(Attachment {
                     name: file_uploader.file_name.clone(),
                     uploader: file_uploader.into(),
                 });
@@ -221,7 +258,7 @@ impl MediaGroupBuilder {
                     ..Default::default()
                 };
 
-                self.builder.media.push(MediaEntry::Video(func(video)));
+                self.media.push(MediaEntry::Video(edit_function(video)));
             }
             Uploader::Url(url) => {
                 let video = MediaVideo {
@@ -230,18 +267,11 @@ impl MediaGroupBuilder {
                     ..Default::default()
                 };
 
-                self.builder.media.push(MediaEntry::Video(func(video)));
+                self.media.push(MediaEntry::Video(edit_function(video)));
             }
             Uploader::Empty => (),
         }
 
         self
-    }
-
-    pub fn add_video<U>(self, uploader: U, thumbnail: Option<FileUploader>) -> Self
-    where
-        U: Into<Uploader>,
-    {
-        self.build_video(uploader, thumbnail, std::convert::identity)
     }
 }

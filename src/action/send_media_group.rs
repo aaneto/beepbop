@@ -11,23 +11,21 @@ impl Bot {
         self,
         media_group: MediaGroup,
     ) -> impl Future<Item = (Self, Vec<Message>), Error = BotError> {
-        let (query, media_encoded, attachments) = media_group.split();
-
-        if !attachments.is_empty() {
+        if !media_group.attachments.is_empty() {
             let mut req =
                 TelegramRequest::new(Method::POST, self.get_route(&"sendMediaGroup"), self)
-                    .with_query(query)
+                    .with_query(media_group.query)
                     // Media is encoded as a string with a json inside
-                    .with_form_text("media", &media_encoded);
+                    .with_form_text("media", &media_group.media_encoded);
 
-            for attachment in attachments {
+            for attachment in media_group.attachments {
                 req = req.with_uploader(&attachment.name, attachment.uploader);
             }
 
             req.execute()
         } else {
             TelegramRequest::new(Method::POST, self.get_route(&"sendMediaGroup"), self)
-                .with_body(query)
+                .with_body(media_group.query)
                 .execute()
         }
     }
@@ -58,9 +56,10 @@ mod tests {
         let gif = file("res/anim.gif").unwrap();
 
         let group = MediaGroup::build(chat_id)
+            .with_disable_notification(true)
             .add_photo(pupper_file)
             .add_photo(pupper_two)
-            .build_video(gif, None, |video| video.with_caption("MyCaption"))
+            .add_video_with(gif, None, |video| video.with_caption("MyCaption"))
             .finish()
             .unwrap();
 
