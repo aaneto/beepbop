@@ -71,7 +71,19 @@ impl TelegramRequest {
         self
     }
 
-    pub fn with_uploader<U: Uploader>(self, tag: &str, uploader: U) -> Self {
+    pub fn with_form_text<S: ToString>(mut self, tag: S, text: S) -> Self {
+        if let Some(form) = self.form.take() {
+            self.form = Some(form.text(tag.to_string(), text.to_string()));
+        } else {
+            let form = Form::new();
+
+            self.form = Some(form.text(tag.to_string(), text.to_string()));
+        }
+
+        self
+    }
+
+    pub fn with_uploader(self, tag: &str, uploader: Uploader) -> Self {
         uploader.upload_into(tag, self)
     }
 

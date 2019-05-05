@@ -5,6 +5,7 @@ pub enum BotError {
     TelegramError(String),
     RequestError(reqwest::Error),
     DownloadError(String),
+    InvalidMediaGroup(String),
 }
 
 impl From<reqwest::Error> for BotError {
@@ -23,6 +24,7 @@ impl std::fmt::Display for BotError {
             BotError::TelegramError(err) => err.fmt(f),
             BotError::RequestError(err) => err.fmt(f),
             BotError::DownloadError(err) => err.fmt(f),
+            BotError::InvalidMediaGroup(err) => err.fmt(f),
         }
     }
 }
@@ -33,6 +35,7 @@ impl Error for BotError {
             BotError::TelegramError(err) => err,
             BotError::RequestError(err) => err.description(),
             BotError::DownloadError(err) => err,
+            BotError::InvalidMediaGroup(err) => err,
         }
     }
 }

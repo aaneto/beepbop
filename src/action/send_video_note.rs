@@ -29,7 +29,6 @@ mod tests {
     use tokio::runtime::Runtime;
 
     #[test]
-    #[ignore]
     fn test_send_video_note() {
         let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
         let chat_id: i64 = var("CHAT_ID")

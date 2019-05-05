@@ -36,3 +36,12 @@ impl From<String> for ChatID {
         ChatID::String(id)
     }
 }
+
+impl ToString for ChatID {
+    fn to_string(&self) -> String {
+        match self {
+            ChatID::Integer(int) => int.to_string(),
+            ChatID::String(string) => string.to_string()
+        }
+    }
+}
