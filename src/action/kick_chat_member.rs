@@ -34,7 +34,7 @@ mod tests {
 
     #[test]
     #[ignore]
-    fn test_kick_chat_member() {
+    fn kick_chat_member() {
         let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
         let chat_id: i64 = var("CHAT_ID")
             .expect("Cannot find CHAT_ID in ENV")

@@ -35,7 +35,7 @@ mod tests {
     use tokio::runtime::Runtime;
 
     #[test]
-    fn resend_message() {
+    fn forward_message() {
         let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
 
         let message_id: i64 = var("MESSAGE_ID")

@@ -26,7 +26,7 @@ mod tests {
     use tokio::runtime::Runtime;
 
     #[test]
-    fn test_export_chat_invite_link() {
+    fn export_chat_invite_link() {
         let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
 
         let chat_id: i64 = var("CHAT_ID")

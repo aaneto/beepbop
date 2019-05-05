@@ -29,7 +29,7 @@ mod tests {
     use tokio::runtime::Runtime;
 
     #[test]
-    fn test_send_video_note() {
+    fn send_video_note() {
         let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
         let chat_id: i64 = var("CHAT_ID")
             .expect("Cannot find CHAT_ID in ENV")

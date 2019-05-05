@@ -25,7 +25,7 @@ mod tests {
     use tokio::runtime::Runtime;
 
     #[test]
-    fn test_get_user_profile_photos() {
+    fn get_user_profile_photos() {
         let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
         let user_id: i64 = var("USER_ID")
             .expect("Cannot find USER_ID in ENV")

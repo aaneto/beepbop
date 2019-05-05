@@ -19,7 +19,7 @@ mod tests {
     use tokio::runtime::Runtime;
 
     #[test]
-    fn test_get_me() {
+    fn get_me() {
         let api_key = var("API_KEY").expect("Cannot find API_KEY in ENV");
         let bot = Bot::new(&api_key);
 
