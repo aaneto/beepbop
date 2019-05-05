@@ -31,7 +31,7 @@ impl SendPhoto {
     pub fn new<ID, U>(chat_id: ID, photo_uploader: U) -> Self
     where
         ID: Into<ChatID>,
-        U: Into<Uploader>
+        U: Into<Uploader>,
     {
         SendPhoto {
             photo_uploader: photo_uploader.into(),

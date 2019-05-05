@@ -2,9 +2,9 @@ use optional_builder::optional_builder;
 use serde_derive::Serialize;
 
 use crate::input::ChatID;
+use crate::input::IdFileUploader;
 use crate::input::ReplyMarkup;
 use crate::input::Uploader;
-use crate::input::IdFileUploader;
 
 #[derive(Serialize)]
 pub struct SendVideoNoteQuery {
@@ -34,7 +34,7 @@ impl SendVideoNote {
     pub fn new<ID, U>(chat_id: ID, video_note: U) -> Self
     where
         ID: Into<ChatID>,
-        U: Into<IdFileUploader>
+        U: Into<IdFileUploader>,
     {
         SendVideoNote {
             video_note: video_note.into().into(),

@@ -14,15 +14,16 @@ impl Bot {
         let (query, media_encoded, attachments) = media_group.split();
 
         if attachments.len() > 0 {
-            let mut req = TelegramRequest::new(Method::POST, self.get_route(&"sendMediaGroup"), self)
-                .with_query(query)
-                // Media is encoded as a string with a json inside
-                .with_form_text("media", &media_encoded);
+            let mut req =
+                TelegramRequest::new(Method::POST, self.get_route(&"sendMediaGroup"), self)
+                    .with_query(query)
+                    // Media is encoded as a string with a json inside
+                    .with_form_text("media", &media_encoded);
 
             for attachment in attachments {
                 req = req.with_uploader(&attachment.name, attachment.uploader);
             }
-            
+
             req.execute()
         } else {
             TelegramRequest::new(Method::POST, self.get_route(&"sendMediaGroup"), self)

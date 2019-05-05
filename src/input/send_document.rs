@@ -31,7 +31,7 @@ impl SendDocument {
     pub fn new<ID, U>(chat_id: ID, document: U) -> Self
     where
         ID: Into<ChatID>,
-        U: Into<Uploader>
+        U: Into<Uploader>,
     {
         SendDocument {
             document: document.into(),

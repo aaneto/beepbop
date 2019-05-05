@@ -35,7 +35,7 @@ impl SendVoice {
     pub fn new<ID, U>(chat_id: ID, voice: U) -> Self
     where
         ID: Into<ChatID>,
-        U: Into<Uploader>
+        U: Into<Uploader>,
     {
         Self {
             chat_id: chat_id.into(),
@@ -43,7 +43,7 @@ impl SendVoice {
             ..Default::default()
         }
     }
-    
+
     pub fn split(self) -> (SendVoiceQuery, Uploader) {
         let query = SendVoiceQuery {
             chat_id: self.chat_id,

@@ -39,7 +39,7 @@ impl SendAudio {
     pub fn new<ID, U>(chat_id: ID, voice: U) -> Self
     where
         ID: Into<ChatID>,
-        U: Into<Uploader>
+        U: Into<Uploader>,
     {
         Self {
             chat_id: chat_id.into(),

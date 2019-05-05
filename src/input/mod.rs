@@ -47,7 +47,7 @@ pub enum Uploader {
     File(FileUploader),
     Url(UrlUploader),
     Id(IdUploader),
-    Empty
+    Empty,
 }
 
 #[derive(Debug)]
@@ -67,14 +67,10 @@ impl Uploader {
                 }
 
                 request
-            },
-            Uploader::Url(url) => {
-                builder.with_query(&[(tag, url.0)])
-            },
-            Uploader::Id(id) => {
-                builder.with_query(&[(tag, id.0)])
-            },
-            Uploader::Empty => (builder)
+            }
+            Uploader::Url(url) => builder.with_query(&[(tag, url.0)]),
+            Uploader::Id(id) => builder.with_query(&[(tag, id.0)]),
+            Uploader::Empty => (builder),
         }
     }
 }
@@ -138,6 +134,7 @@ pub fn file_url<S: ToString>(url: S) -> UrlUploader {
     UrlUploader(url.to_string())
 }
 
+pub mod action;
 pub mod chat_id;
 pub mod export_chat_invite_link;
 pub mod file_uploader;
@@ -147,10 +144,13 @@ pub mod get_chat;
 pub mod get_chat_member;
 pub mod get_file;
 pub mod get_updates;
+pub mod get_user_profile_photos;
 pub mod inline_keyboard_button;
 pub mod inline_keyboard_button_message;
 pub mod inline_keyboard_markup;
 pub mod keyboard_button;
+pub mod kick_chat_member;
+pub mod media_group;
 pub mod pin_message;
 pub mod promote_chat_member;
 pub mod reply_board_markup;
@@ -159,25 +159,22 @@ pub mod reply_markup;
 pub mod restrict_chat_member;
 pub mod send_animation;
 pub mod send_audio;
+pub mod send_chat_action;
 pub mod send_contact;
 pub mod send_document;
 pub mod send_location;
 pub mod send_message;
 pub mod send_photo;
+pub mod send_venue;
 pub mod send_video;
 pub mod send_video_note;
 pub mod send_voice;
-pub mod send_venue;
 pub mod set_chat_description;
 pub mod set_chat_sticker_set;
 pub mod set_chat_title;
-pub mod get_user_profile_photos;
-pub mod action;
-pub mod send_chat_action;
-pub mod kick_chat_member;
 pub mod unban_chat_member;
-pub mod media_group;
 
+pub use action::*;
 pub use chat_id::*;
 pub use export_chat_invite_link::*;
 pub use file_uploader::*;
@@ -187,10 +184,13 @@ pub use get_chat::*;
 pub use get_chat_member::*;
 pub use get_file::*;
 pub use get_updates::*;
+pub use get_user_profile_photos::*;
 pub use inline_keyboard_button::*;
 pub use inline_keyboard_button_message::*;
 pub use inline_keyboard_markup::*;
 pub use keyboard_button::*;
+pub use kick_chat_member::*;
+pub use media_group::*;
 pub use pin_message::*;
 pub use promote_chat_member::*;
 pub use reply_board_markup::*;
@@ -199,21 +199,17 @@ pub use reply_markup::*;
 pub use restrict_chat_member::*;
 pub use send_animation::*;
 pub use send_audio::*;
+pub use send_chat_action::*;
 pub use send_contact::*;
 pub use send_document::*;
 pub use send_location::*;
 pub use send_message::*;
 pub use send_photo::*;
+pub use send_venue::*;
 pub use send_video::*;
 pub use send_video_note::*;
 pub use send_voice::*;
 pub use set_chat_description::*;
 pub use set_chat_sticker_set::*;
 pub use set_chat_title::*;
-pub use get_user_profile_photos::*;
-pub use send_venue::*;
-pub use action::*;
-pub use send_chat_action::*;
-pub use kick_chat_member::*;
 pub use unban_chat_member::*;
-pub use media_group::*;

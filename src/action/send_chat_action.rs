@@ -2,8 +2,8 @@ use futures::Future;
 
 use crate::error::BotError;
 use crate::input::Action;
-use crate::input::SendChatAction;
 use crate::input::ChatID;
+use crate::input::SendChatAction;
 use crate::telegram_request::{Method, TelegramRequest};
 use crate::Bot;
 
@@ -23,8 +23,8 @@ impl Bot {
 
 #[cfg(test)]
 mod tests {
-    use crate::Bot;
     use crate::input::Action;
+    use crate::Bot;
     use std::env::var;
     use std::error::Error;
     use tokio::runtime::Runtime;
@@ -46,4 +46,3 @@ mod tests {
         }
     }
 }
-

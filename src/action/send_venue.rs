@@ -19,8 +19,8 @@ impl Bot {
 
 #[cfg(test)]
 mod tests {
-    use crate::Bot;
     use crate::input::SendVenue;
+    use crate::Bot;
     use std::env::var;
     use tokio::runtime::Runtime;
 
@@ -37,8 +37,8 @@ mod tests {
 
         let mut runtime = Runtime::new().expect("Unable to create a runtime");
 
-        let arg = SendVenue::new(chat_id, 20.0, 30.5, "Dunno", "Somewhere")
-            .with_foursquare_id("sddd");
+        let arg =
+            SendVenue::new(chat_id, 20.0, 30.5, "Dunno", "Somewhere").with_foursquare_id("sddd");
 
         if let Err(err) = runtime.block_on(bot.send_venue(arg)) {
             panic!("{:#?}", err);

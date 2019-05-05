@@ -24,7 +24,7 @@ impl ToString for Action {
             Action::UploadDocument => "upload_document".into(),
             Action::FindLocation => "find_location".into(),
             Action::RecordVideoNote => "record_video_note".into(),
-            Action::UploadVideoNote => "upload_video_note".into()
+            Action::UploadVideoNote => "upload_video_note".into(),
         }
     }
 }

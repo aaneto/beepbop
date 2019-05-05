@@ -3,10 +3,10 @@ use std::error::Error;
 use optional_builder::optional_builder;
 use serde_derive::Serialize;
 
-use crate::input::Uploader;
-use crate::input::FileUploader;
-use crate::input::ChatID;
 use crate::error::BotError;
+use crate::input::ChatID;
+use crate::input::FileUploader;
+use crate::input::Uploader;
 
 #[optional_builder]
 #[derive(Default, Debug, Serialize)]
@@ -50,7 +50,7 @@ pub struct MediaPhoto {
 #[serde(untagged)]
 pub enum MediaEntry {
     Video(MediaVideo),
-    Photo(MediaPhoto)
+    Photo(MediaPhoto),
 }
 
 #[optional_builder]
@@ -60,13 +60,13 @@ pub struct MediaGroupQuery {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_notification: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reply_to_message_id: Option<i64>
+    pub reply_to_message_id: Option<i64>,
 }
 
 #[derive(Debug)]
 pub struct Attachment {
     pub uploader: Uploader,
-    pub name: String
+    pub name: String,
 }
 
 #[derive(Debug, Default)]
@@ -76,7 +76,7 @@ pub struct MediaGroup {
     pub media_encoded: String,
     pub disable_notification: Option<bool>,
     pub reply_to_message_id: Option<i64>,
-    pub attachments: Vec<Attachment>
+    pub attachments: Vec<Attachment>,
 }
 
 impl MediaGroup {
@@ -86,16 +86,14 @@ impl MediaGroup {
             ..Default::default()
         };
 
-        MediaGroupBuilder {
-            builder: media,
-        }
+        MediaGroupBuilder { builder: media }
     }
 
     pub fn split(self) -> (MediaGroupQuery, String, Vec<Attachment>) {
         let query = MediaGroupQuery {
             chat_id: self.chat_id,
             disable_notification: self.disable_notification,
-            reply_to_message_id: self.reply_to_message_id
+            reply_to_message_id: self.reply_to_message_id,
         };
 
         (query, self.media_encoded, self.attachments)
@@ -111,19 +109,21 @@ impl MediaGroupBuilder {
         let number_of_medias = self.builder.media.len();
 
         if number_of_medias > 10 || number_of_medias < 2 {
-            return Err(BotError::InvalidMediaGroup(
-                format!("Group media must have between 2 and 10 media files, found {}", number_of_medias)
-            ));
+            return Err(BotError::InvalidMediaGroup(format!(
+                "Group media must have between 2 and 10 media files, found {}",
+                number_of_medias
+            )));
         }
 
         match serde_json::to_string(&self.builder.media) {
             Ok(media_encoded) => {
                 self.builder.media_encoded = media_encoded;
-            },
+            }
             Err(err) => {
-                return Err(BotError::InvalidMediaGroup(
-                    format!("Cannot deserialize media group: {}", err.description())
-                ));
+                return Err(BotError::InvalidMediaGroup(format!(
+                    "Cannot deserialize media group: {}",
+                    err.description()
+                )));
             }
         };
 
@@ -133,7 +133,7 @@ impl MediaGroupBuilder {
     pub fn build_photo<U, F>(mut self, uploader: U, func: F) -> Self
     where
         U: Into<Uploader>,
-        F: Fn(MediaPhoto) -> MediaPhoto
+        F: Fn(MediaPhoto) -> MediaPhoto,
     {
         match uploader.into() {
             Uploader::File(file_uploader) => {
@@ -144,13 +144,11 @@ impl MediaGroupBuilder {
                 };
 
                 self.builder.media.push(MediaEntry::Photo(func(photo)));
-                self.builder.attachments.push(
-                    Attachment {
-                        name: file_uploader.file_name.clone(),
-                        uploader: file_uploader.into()
-                    }
-                );
-            },
+                self.builder.attachments.push(Attachment {
+                    name: file_uploader.file_name.clone(),
+                    uploader: file_uploader.into(),
+                });
+            }
             Uploader::Id(id) => {
                 let photo = MediaPhoto {
                     r#type: "photo".into(),
@@ -159,7 +157,7 @@ impl MediaGroupBuilder {
                 };
 
                 self.builder.media.push(MediaEntry::Photo(func(photo)));
-            },
+            }
             Uploader::Url(url) => {
                 let photo = MediaPhoto {
                     r#type: "photo".into(),
@@ -168,8 +166,8 @@ impl MediaGroupBuilder {
                 };
 
                 self.builder.media.push(MediaEntry::Photo(func(photo)));
-            },
-            Uploader::Empty => ()
+            }
+            Uploader::Empty => (),
         }
 
         self
@@ -177,15 +175,20 @@ impl MediaGroupBuilder {
 
     pub fn add_photo<U>(self, uploader: U) -> Self
     where
-        U: Into<Uploader>
+        U: Into<Uploader>,
     {
         self.build_photo(uploader, std::convert::identity)
     }
 
-    pub fn build_video<U, F>(mut self, uploader: U, thumbnail: Option<FileUploader>, func: F) -> Self
+    pub fn build_video<U, F>(
+        mut self,
+        uploader: U,
+        thumbnail: Option<FileUploader>,
+        func: F,
+    ) -> Self
     where
         U: Into<Uploader>,
-        F: Fn(MediaVideo) -> MediaVideo
+        F: Fn(MediaVideo) -> MediaVideo,
     {
         match uploader.into() {
             Uploader::File(file_uploader) => {
@@ -200,7 +203,7 @@ impl MediaGroupBuilder {
 
                     self.builder.attachments.push(Attachment {
                         name: thumb.file_name.clone(),
-                        uploader: thumb.into()
+                        uploader: thumb.into(),
                     });
                 };
 
@@ -208,9 +211,9 @@ impl MediaGroupBuilder {
 
                 self.builder.attachments.push(Attachment {
                     name: file_uploader.file_name.clone(),
-                    uploader: file_uploader.into()
+                    uploader: file_uploader.into(),
                 });
-            },
+            }
             Uploader::Id(id) => {
                 let video = MediaVideo {
                     r#type: "video".into(),
@@ -219,7 +222,7 @@ impl MediaGroupBuilder {
                 };
 
                 self.builder.media.push(MediaEntry::Video(func(video)));
-            },
+            }
             Uploader::Url(url) => {
                 let video = MediaVideo {
                     r#type: "video".into(),
@@ -228,8 +231,8 @@ impl MediaGroupBuilder {
                 };
 
                 self.builder.media.push(MediaEntry::Video(func(video)));
-            },
-            Uploader::Empty => ()
+            }
+            Uploader::Empty => (),
         }
 
         self
@@ -237,7 +240,7 @@ impl MediaGroupBuilder {
 
     pub fn add_video<U>(self, uploader: U, thumbnail: Option<FileUploader>) -> Self
     where
-        U: Into<Uploader>
+        U: Into<Uploader>,
     {
         self.build_video(uploader, thumbnail, std::convert::identity)
     }

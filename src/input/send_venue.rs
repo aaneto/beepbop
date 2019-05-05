@@ -23,7 +23,7 @@ impl SendVenue {
     pub fn new<S, ID>(chat_id: ID, latitude: f32, longitude: f32, title: S, address: S) -> Self
     where
         S: Into<String>,
-        ID: Into<ChatID>
+        ID: Into<ChatID>,
     {
         SendVenue {
             chat_id: chat_id.into(),

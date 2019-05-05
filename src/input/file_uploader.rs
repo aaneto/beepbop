@@ -107,7 +107,7 @@ impl FileUploader {
         Self {
             part,
             thumbnail: None,
-            file_name
+            file_name,
         }
     }
 

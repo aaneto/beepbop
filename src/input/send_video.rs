@@ -39,7 +39,7 @@ impl SendVideo {
     pub fn new<ID, U>(chat_id: ID, video: U) -> Self
     where
         ID: Into<ChatID>,
-        U: Into<Uploader>
+        U: Into<Uploader>,
     {
         SendVideo {
             video: video.into(),

@@ -37,7 +37,7 @@ impl SendAnimation {
     pub fn new<ID, U>(chat_id: ID, animation: U) -> Self
     where
         ID: Into<ChatID>,
-        U: Into<Uploader>
+        U: Into<Uploader>,
     {
         SendAnimation {
             animation: animation.into(),
