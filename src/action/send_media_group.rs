@@ -13,7 +13,7 @@ impl Bot {
     ) -> impl Future<Item = (Self, Vec<Message>), Error = BotError> {
         let (query, media_encoded, attachments) = media_group.split();
 
-        if attachments.len() > 0 {
+        if !attachments.is_empty() {
             let mut req =
                 TelegramRequest::new(Method::POST, self.get_route(&"sendMediaGroup"), self)
                     .with_query(query)
@@ -57,7 +57,7 @@ mod tests {
         let pupper_two = file("res/puppy.jpg").unwrap();
         let gif = file("res/anim.gif").unwrap();
 
-        let group = MediaGroup::new(chat_id)
+        let group = MediaGroup::build(chat_id)
             .add_photo(pupper_file)
             .add_photo(pupper_two)
             .build_video(gif, None, |video| video.with_caption("MyCaption"))

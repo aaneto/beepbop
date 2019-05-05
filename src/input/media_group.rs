@@ -80,7 +80,7 @@ pub struct MediaGroup {
 }
 
 impl MediaGroup {
-    pub fn new<ID: Into<ChatID>>(chat_id: ID) -> MediaGroupBuilder {
+    pub fn build<ID: Into<ChatID>>(chat_id: ID) -> MediaGroupBuilder {
         let media = MediaGroup {
             chat_id: chat_id.into(),
             ..Default::default()
