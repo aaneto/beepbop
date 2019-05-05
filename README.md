@@ -67,7 +67,6 @@ fn main() {
 
 There are some actions/methods in need of implementation, those are:
 
-- sendMediaGroup
 - editMessageLiveLocation
 - stopMessageLiveLocation
 - answerCallbackQuery
