@@ -69,8 +69,6 @@ fn main() {
 
 There are some actions/methods in need of implementation, those are:
 
-- editMessageLiveLocation
-- stopMessageLiveLocation
 - answerCallbackQuery
 
 The webhook functionality also lacks an implementation:

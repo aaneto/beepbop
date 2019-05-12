@@ -136,6 +136,7 @@ pub fn file_url<S: ToString>(url: S) -> UrlUploader {
 
 pub mod action;
 pub mod chat_id;
+pub mod edit_live_location;
 pub mod export_chat_invite_link;
 pub mod file_uploader;
 pub mod force_reply;
@@ -172,10 +173,12 @@ pub mod send_voice;
 pub mod set_chat_description;
 pub mod set_chat_sticker_set;
 pub mod set_chat_title;
+pub mod stop_live_location;
 pub mod unban_chat_member;
 
 pub use action::*;
 pub use chat_id::*;
+pub use edit_live_location::*;
 pub use export_chat_invite_link::*;
 pub use file_uploader::*;
 pub use force_reply::*;
@@ -212,4 +215,5 @@ pub use send_voice::*;
 pub use set_chat_description::*;
 pub use set_chat_sticker_set::*;
 pub use set_chat_title::*;
+pub use stop_live_location::*;
 pub use unban_chat_member::*;

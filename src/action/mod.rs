@@ -1,5 +1,6 @@
 pub mod delete_chat_photo;
 pub mod delete_chat_sticker_set;
+pub mod edit_live_location;
 pub mod export_chat_invite_link;
 pub mod forward_message;
 pub mod get_chat;
@@ -31,5 +32,6 @@ pub mod set_chat_description;
 pub mod set_chat_photo;
 pub mod set_chat_sticker_set;
 pub mod set_chat_title;
+pub mod stop_live_location;
 pub mod unban_chat_member;
 pub mod unpin_message;

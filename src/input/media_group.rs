@@ -51,7 +51,7 @@ pub struct MediaPhoto {
 #[serde(untagged)]
 /// The MediaEntry Enum is a container type
 /// for both MediaVideo and MediaPhoto.
-/// 
+///
 /// This is a detail implementation of MediaGroup
 /// and probably should not be used directly.
 enum MediaEntry {
@@ -78,7 +78,7 @@ pub struct MediaGroupQuery {
 /// uploading MediaGroup's includes having to
 /// remember what files where uploaded under
 /// what name.
-/// 
+///
 /// This struct is an implementation detail of
 /// MediaGroup and should not be used directly.
 pub struct Attachment {
@@ -93,7 +93,7 @@ pub struct Attachment {
 pub struct MediaGroup {
     pub query: MediaGroupQuery,
     pub media_encoded: String,
-    pub attachments: Vec<Attachment>
+    pub attachments: Vec<Attachment>,
 }
 
 #[optional_builder]
@@ -129,17 +129,15 @@ impl MediaGroupBuilder {
         }
 
         match serde_json::to_string(&self.media) {
-            Ok(media_encoded) => {
-                Ok(MediaGroup {
-                    media_encoded,
-                    query: MediaGroupQuery {
-                        chat_id: self.chat_id,
-                        disable_notification: self.disable_notification,
-                        reply_to_message_id: self.reply_to_message_id,
-                    },
-                    attachments: self.attachments
-                })
-            }
+            Ok(media_encoded) => Ok(MediaGroup {
+                media_encoded,
+                query: MediaGroupQuery {
+                    chat_id: self.chat_id,
+                    disable_notification: self.disable_notification,
+                    reply_to_message_id: self.reply_to_message_id,
+                },
+                attachments: self.attachments,
+            }),
             Err(err) => {
                 return Err(BotError::InvalidMediaGroup(format!(
                     "Cannot deserialize media group: {}",

@@ -20,12 +20,12 @@ pub struct SendLocation {
 }
 
 impl SendLocation {
-    pub fn new(chat_id: ChatID, latitude: f64, longitude: f64) -> Self {
+    pub fn new<ID: Into<ChatID>>(chat_id: ID, latitude: f64, longitude: f64) -> Self {
         SendLocation {
-            chat_id,
+            chat_id: chat_id.into(),
             latitude,
             longitude,
-            live_period: None,
+            live_period: Some(60),
             disable_notification: None,
             reply_to_message_id: None,
             reply_markup: None,
