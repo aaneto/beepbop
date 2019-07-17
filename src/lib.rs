@@ -14,7 +14,7 @@
 //!
 //! ```rust
 //! use std::env::var;
-//! use beepbop::Bot;
+//! use beepbop::bot::Bot;
 //! use beepbop::object::User;
 //! use beepbop::tokio;
 //! use beepbop::futures::Future;
@@ -38,7 +38,7 @@
 //!
 //! ```rust
 //! use std::env::var;
-//! use beepbop::Bot;
+//! use beepbop::bot::Bot;
 //! use beepbop::tokio;
 //! use beepbop::futures::Future;
 //!
@@ -65,6 +65,7 @@
 //!
 //! ```
 pub mod prelude {
+    pub use crate::bot::Bot;
     pub use crate::error::BotError;
     pub use crate::futures;
     pub use crate::futures::Future;
@@ -72,10 +73,9 @@ pub mod prelude {
     pub use crate::object::*;
     pub use crate::reqwest;
     pub use crate::tokio;
-    pub use crate::Bot;
 }
 
-pub mod action;
+pub mod bot;
 pub mod error;
 pub mod input;
 pub mod object;
@@ -89,94 +89,3 @@ pub mod tests;
 pub use futures;
 pub use reqwest;
 pub use tokio;
-
-use std::sync::Arc;
-
-use futures::stream::Stream;
-use futures::Future;
-
-use reqwest::r#async::Chunk;
-use reqwest::r#async::Client;
-use reqwest::r#async::Response;
-
-use crate::error::BotError;
-use crate::object::FileBuffer;
-
-pub type BotResult<T> = Result<T, BotError>;
-
-pub struct Connection {
-    pub client: Client,
-    pub api_key: String,
-}
-
-#[derive(Clone)]
-pub struct Bot {
-    pub connection: Arc<Connection>,
-}
-
-impl std::fmt::Debug for Bot {
-    fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-        write!(fmt, "Bot:{}", self.connection.api_key)
-    }
-}
-
-impl Bot {
-    pub fn new(api_key: &str) -> Self {
-        let connection = Connection {
-            api_key: api_key.to_string(),
-            client: Client::new(),
-        };
-
-        Bot {
-            connection: Arc::new(connection),
-        }
-    }
-
-    pub fn download_file(
-        self,
-        file_id: String,
-    ) -> impl Future<Item = (Self, FileBuffer), Error = BotError> {
-        self.get_file(file_id).and_then(move |(bot, file_info)| {
-            let file_path = file_info
-                .file_path
-                .expect("API download file without file_path");
-
-            let uri = bot.get_file_uri(&file_path);
-
-            bot.connection
-                .client
-                .get(&uri)
-                .send()
-                .and_then(|response: Response| response.into_body().concat2())
-                .map(move |chunks: Chunk| {
-                    let file_buffer = FileBuffer::new(file_path, chunks.to_vec());
-
-                    (bot, file_buffer)
-                })
-                .map_err(std::convert::Into::into)
-        })
-    }
-
-    #[inline]
-    fn compose_url(&self, mut base: String, extra: &str) -> String {
-        base.push_str(&self.connection.api_key);
-        base.push('/');
-        base.push_str(extra);
-
-        base
-    }
-
-    #[inline]
-    pub fn get_route(&self, route: &str) -> String {
-        let url = "https://api.telegram.org/bot".to_string();
-
-        self.compose_url(url, route)
-    }
-
-    #[inline]
-    fn get_file_uri(&self, path: &str) -> String {
-        let url = "https://api.telegram.org/file/bot".to_string();
-
-        self.compose_url(url, path)
-    }
-}

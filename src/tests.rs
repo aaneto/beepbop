@@ -1,9 +1,9 @@
 //! Integration tests for telegrambot.
 use std::time::Duration;
 
+use crate::bot::Bot;
 use crate::input::FileUploader;
 use crate::input::SendDocument;
-use crate::Bot;
 use futures::Future;
 use std::env::var;
 use tokio::runtime::Runtime;
