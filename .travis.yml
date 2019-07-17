@@ -1,0 +1,44 @@
+language: rust
+cache: cargo
+git:
+  depth: 1
+
+env:
+  global:
+    - CRATE_NAME=beepbop
+
+stages:
+  - test
+  - code_coverage
+  - quality_gate
+
+jobs:
+  include:
+    - stage: test
+      script: cargo test
+      os: linux
+      rust: nightly
+    
+    - stage: test
+      script: cargo test
+      os: linux
+      rust: stable
+
+    - stage: code_coverage
+      os: linux
+      rust: stable
+      before_script: cargo install cargo-tarpaulin
+      script:
+        - cargo tarpaulin --out Xml
+        - bash <(curl -s https://codecov.io/bash)
+      if: tag =~ /^v\d+\.\d+\.\d+.*$/
+
+    - stage: quality_gate
+      os: linux
+      rust: stable
+      before_script:
+        - rustup component add rustfmt
+        # - rustup component add clippy
+      script:
+        - cargo fmt --all -- --check
+        # - cargo clippy -- -D warnings
