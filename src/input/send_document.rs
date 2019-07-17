@@ -1,4 +1,4 @@
-use optional_builder::optional_builder;
+use optbuilder::OptionalBuilder;
 use serde_derive::Serialize;
 
 use crate::input::ChatID;
@@ -15,8 +15,7 @@ pub struct SendDocumentQuery {
     pub reply_markup: Option<ReplyMarkup>,
 }
 
-#[optional_builder]
-#[derive(Default, Debug)]
+#[derive(OptionalBuilder, Default, Debug)]
 pub struct SendDocument {
     pub document: Uploader,
     pub chat_id: ChatID,

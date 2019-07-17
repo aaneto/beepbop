@@ -1,20 +1,19 @@
-use optional_builder::optional_builder;
+use optbuilder::OptionalBuilder;
 
 use serde_derive::Serialize;
 
 use crate::input::ChatID;
 use crate::input::ReplyMarkup;
 
-#[optional_builder]
-#[derive(Default, Clone, Debug, Serialize)]
+#[derive(OptionalBuilder, Default, Clone, Debug, Serialize)]
 pub struct EditLiveLocation {
-    #[optional_builder(skip)]
+    #[optbuilder(skip)]
     pub chat_id: Option<ChatID>,
     pub latitude: f64,
     pub longitude: f64,
-    #[optional_builder(skip)]
+    #[optbuilder(skip)]
     pub message_id: Option<i64>,
-    #[optional_builder(skip)]
+    #[optbuilder(skip)]
     pub inline_message_id: Option<String>,
     #[serde(flatten)]
     pub reply_markup: Option<ReplyMarkup>,

@@ -1,12 +1,11 @@
-use optional_builder::optional_builder;
+use optbuilder::OptionalBuilder;
 use serde_derive::Serialize;
 
 use crate::input::ChatID;
 use crate::input::ReplyMarkup;
 use crate::input::Uploader;
 
-#[optional_builder]
-#[derive(Debug, Default)]
+#[derive(OptionalBuilder, Debug, Default)]
 pub struct SendAudio {
     pub chat_id: ChatID,
     pub voice: Uploader,

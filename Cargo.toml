@@ -15,7 +15,7 @@ serde_json = "1.0.39"
 serde = "1.0.90"
 tokio = "0.1.19"
 futures = "0.1"
-optional_builder = {path = "optional_builder" }
+optbuilder = "0.1.1"
 
 [build-dependencies]
 skeptic = "0.13"

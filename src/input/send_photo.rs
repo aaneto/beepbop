@@ -1,4 +1,4 @@
-use optional_builder::optional_builder;
+use optbuilder::OptionalBuilder;
 use serde_derive::Serialize;
 
 use crate::input::ChatID;
@@ -15,8 +15,7 @@ pub struct SendPhotoQuery {
     pub reply_markup: Option<ReplyMarkup>,
 }
 
-#[optional_builder]
-#[derive(Debug, Default)]
+#[derive(OptionalBuilder, Debug, Default)]
 pub struct SendPhoto {
     pub photo_uploader: Uploader,
     pub chat_id: ChatID,

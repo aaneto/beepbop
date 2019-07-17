@@ -1,12 +1,11 @@
-use optional_builder::optional_builder;
+use optbuilder::OptionalBuilder;
 
 use serde_derive::Serialize;
 
 use crate::input::ChatID;
 use crate::input::ReplyMarkup;
 
-#[optional_builder]
-#[derive(Default, Clone, Debug, Serialize)]
+#[derive(OptionalBuilder, Default, Clone, Debug, Serialize)]
 pub struct StopLiveLocation {
     pub chat_id: Option<ChatID>,
     pub message_id: Option<i64>,

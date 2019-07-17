@@ -1,17 +1,16 @@
-use optional_builder::optional_builder;
+use optbuilder::OptionalBuilder;
 
 use serde_derive::Serialize;
 
 use crate::input::ChatID;
 use crate::input::ReplyMarkup;
 
-#[optional_builder]
-#[derive(Clone, Debug, Serialize)]
+#[derive(OptionalBuilder, Clone, Debug, Serialize)]
 pub struct SendLocation {
     pub chat_id: ChatID,
     pub latitude: f64,
     pub longitude: f64,
-    #[optional_builder(skip)]
+    #[optbuilder(skip)]
     pub live_period: Option<u32>,
     pub disable_notification: Option<bool>,
     pub reply_to_message_id: Option<i64>,

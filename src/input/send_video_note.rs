@@ -1,4 +1,4 @@
-use optional_builder::optional_builder;
+use optbuilder::OptionalBuilder;
 use serde_derive::Serialize;
 
 use crate::input::ChatID;
@@ -17,8 +17,7 @@ pub struct SendVideoNoteQuery {
     pub height: Option<u32>,
 }
 
-#[optional_builder]
-#[derive(Default, Debug)]
+#[derive(OptionalBuilder, Default, Debug)]
 pub struct SendVideoNote {
     pub video_note: Uploader,
     pub chat_id: ChatID,

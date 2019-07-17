@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use optional_builder::optional_builder;
+use optbuilder::OptionalBuilder;
 use serde_derive::Serialize;
 
 use crate::error::BotError;
@@ -8,8 +8,7 @@ use crate::input::ChatID;
 use crate::input::FileUploader;
 use crate::input::Uploader;
 
-#[optional_builder]
-#[derive(Default, Debug, Serialize)]
+#[derive(OptionalBuilder, Default, Debug, Serialize)]
 /// The MediaVideo is a struct containing metadata
 /// about a video used within an MediaGroup. the media
 /// String is a name granted by the MediaGroup object.
@@ -17,7 +16,7 @@ pub struct MediaVideo {
     r#type: String,
     media: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[optional_builder(skip)]
+    #[optbuilder(skip)]
     thumb: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     caption: Option<String>,
@@ -33,8 +32,7 @@ pub struct MediaVideo {
     supports_streaming: Option<bool>,
 }
 
-#[optional_builder]
-#[derive(Default, Debug, Serialize)]
+#[derive(OptionalBuilder, Default, Debug, Serialize)]
 /// The MediaPhoto is a struct containing metadata
 /// about a photo used within an MediaGroup. the media
 /// String is a name granted by the MediaGroup object.
@@ -96,8 +94,7 @@ pub struct MediaGroup {
     pub attachments: Vec<Attachment>,
 }
 
-#[optional_builder]
-#[derive(Default, Debug)]
+#[derive(OptionalBuilder, Default, Debug)]
 pub struct MediaGroupBuilder {
     chat_id: ChatID,
     media: Vec<MediaEntry>,

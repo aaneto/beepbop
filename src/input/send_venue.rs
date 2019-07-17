@@ -1,11 +1,10 @@
-use optional_builder::optional_builder;
+use optbuilder::OptionalBuilder;
 
 use serde_derive::Serialize;
 
 use crate::input::{ChatID, ReplyMarkup};
 
-#[optional_builder]
-#[derive(Default, Debug, Serialize)]
+#[derive(OptionalBuilder, Default, Debug, Serialize)]
 pub struct SendVenue {
     pub chat_id: ChatID,
     pub latitude: f32,
