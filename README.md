@@ -1,7 +1,5 @@
 # Beepbop
 
-## THIS IS A WIP(Work in Progress)
-
 ## Overview
 
 Beepbop is yet another telegram BOT API wrapper, this lib
