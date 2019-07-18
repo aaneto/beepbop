@@ -31,7 +31,6 @@ jobs:
       script:
         - cargo tarpaulin --out Xml
         - bash <(curl -s https://codecov.io/bash)
-      if: tag =~ /^v\d+\.\d+\.\d+.*$/
 
     - stage: quality_gate
       os: linux
