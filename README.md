@@ -1,5 +1,5 @@
 # Beepbop
-
+[![Build Status](https://travis-ci.org/aaneto/beepbop.svg?branch=master)](https://travis-ci.org/aaneto/beepbop)
 ## Overview
 
 Beepbop is yet another telegram BOT API wrapper, this lib
