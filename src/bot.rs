@@ -1,3 +1,8 @@
+#![deny(missing_docs)]
+//! The Bot module defines the Bot object. The Bot
+//! object has all Telegram Actions available to him,
+//! as long as you have the required arguments.
+
 use std::sync::Arc;
 
 use futures::stream::Stream;
@@ -15,16 +20,21 @@ use crate::telegram_request::{Method, TelegramRequest};
 
 use futures::Future;
 
+/// A wrapper for Bot related Results
 pub type BotResult<T> = Result<T, BotError>;
 
-pub struct Connection {
-    pub client: Client,
-    pub api_key: String,
+/// The Connection struct holds data required for
+/// the Bot to communicate with the Telegram API.
+pub(crate) struct Connection {
+    pub(crate) client: Client,
+    api_key: String,
 }
 
+/// The Bot is a ARC over a connection, so piping is possible
+/// between Futures
 #[derive(Clone)]
 pub struct Bot {
-    pub connection: Arc<Connection>,
+    pub(crate) connection: Arc<Connection>,
 }
 
 impl std::fmt::Debug for Bot {
@@ -34,6 +44,7 @@ impl std::fmt::Debug for Bot {
 }
 
 impl Bot {
+    /// Create a new Telegram Bot using an API_KEY
     pub fn new(api_key: &str) -> Self {
         let connection = Connection {
             api_key: api_key.to_string(),
@@ -45,6 +56,7 @@ impl Bot {
         }
     }
 
+    /// Download a file at telegram using it's ID
     pub fn download_file(
         self,
         file_id: String,
@@ -79,6 +91,7 @@ impl Bot {
         base
     }
 
+    /// Construct an URI using the telegram domain
     #[inline]
     pub fn get_route(&self, route: &str) -> String {
         let url = "https://api.telegram.org/bot".to_string();
@@ -93,6 +106,7 @@ impl Bot {
         self.compose_url(url, path)
     }
 
+    /// Send a video note to a telegram chat
     pub fn send_video_note(
         self,
         send_video_note: SendVideoNote,
@@ -105,6 +119,8 @@ impl Bot {
             .execute()
     }
 
+    /// Send a chat action, that is a special action that a bot can take for
+    /// some time, like displaying 'sending photo' for a few seconds.
     pub fn send_chat_action<ID: Into<ChatID>>(
         self,
         id: ID,
@@ -117,6 +133,7 @@ impl Bot {
             .execute()
     }
 
+    /// Send a document to a telegram chat
     pub fn send_document(
         self,
         send_document: SendDocument,
@@ -129,6 +146,7 @@ impl Bot {
             .execute()
     }
 
+    /// Forward a message to a telegram chat by id
     pub fn forward_message<ID: Into<ChatID>>(
         self,
         chat_id: ID,
@@ -148,6 +166,7 @@ impl Bot {
             .execute()
     }
 
+    /// Send a new message to a telegram chat
     pub fn send_message(
         self,
         send_message: SendMessage,
@@ -157,6 +176,7 @@ impl Bot {
             .execute()
     }
 
+    /// Leave a chat by id
     pub fn leave_chat<ID: Into<ChatID>>(
         self,
         id: ID,
@@ -166,6 +186,7 @@ impl Bot {
             .execute()
     }
 
+    /// Unban a chat member of a telegram chat
     pub fn unban_chat_member<ID: Into<ChatID>>(
         self,
         id: ID,
@@ -181,6 +202,7 @@ impl Bot {
             .execute()
     }
 
+    /// Send a contact to a telegram chat
     pub fn send_contact(
         self,
         send_contact: SendContact,
@@ -190,6 +212,7 @@ impl Bot {
             .execute()
     }
 
+    /// Get the count of members on a telegram chat
     pub fn get_chat_members_count<ID: Into<ChatID>>(
         self,
         id: ID,
@@ -199,6 +222,7 @@ impl Bot {
             .execute()
     }
 
+    /// Send an audio to a telegram chat
     pub fn send_audio(
         self,
         send_audio: SendAudio,
@@ -211,6 +235,7 @@ impl Bot {
             .execute()
     }
 
+    /// Send a media group to a telegram chat, that is, a group of photos and videos
     pub fn send_media_group(
         self,
         media_group: MediaGroup,
@@ -234,6 +259,7 @@ impl Bot {
         }
     }
 
+    /// Get information about a chat by chat id
     pub fn get_chat<ID: Into<ChatID>>(
         self,
         id: ID,
@@ -245,6 +271,7 @@ impl Bot {
             .execute()
     }
 
+    /// Kick a member of a telegram chat. Require kicking privileges
     pub fn kick_chat_member<ID: Into<ChatID>>(
         self,
         id: ID,
@@ -262,6 +289,8 @@ impl Bot {
             .execute()
     }
 
+    /// Get updates for your bot, those updates can be of many kinds, check the Update struct
+    /// for more information
     pub fn get_updates(
         self,
         get_updates: GetUpdates,
@@ -271,6 +300,7 @@ impl Bot {
             .execute()
     }
 
+    /// Send a location on a telegram chat
     pub fn send_location(
         self,
         send_location: SendLocation,
@@ -280,6 +310,7 @@ impl Bot {
             .execute()
     }
 
+    /// Send a venue on a telegram chat
     pub fn send_venue(
         self,
         send_venue: SendVenue,
@@ -289,6 +320,7 @@ impl Bot {
             .execute()
     }
 
+    /// Get the profile photos of an user
     pub fn get_user_profile_photos(
         self,
         get_user_profile_photos: GetUserProfilePhotos,
@@ -298,6 +330,7 @@ impl Bot {
             .execute()
     }
 
+    /// Edit an on going live location
     pub fn edit_live_location(
         self,
         edit_live_location: EditLiveLocation,
@@ -323,6 +356,7 @@ impl Bot {
             .execute()
     }
 
+    /// Get information of a file on telegram
     pub fn get_file(
         self,
         file_id: String,
@@ -332,6 +366,7 @@ impl Bot {
             .execute()
     }
 
+    /// Unpin a message on a telegram chat
     pub fn unpin_message<ID: Into<ChatID>>(
         self,
         id: ID,
@@ -341,6 +376,7 @@ impl Bot {
             .execute()
     }
 
+    /// Set the textual description of a telegram chat
     pub fn set_chat_description<ID: Into<ChatID>>(
         self,
         id: ID,
@@ -353,6 +389,7 @@ impl Bot {
             .execute()
     }
 
+    /// Restrict a chat member by some defined parameters
     pub fn restrict_chat_member(
         self,
         restrict_member: RestrictChatMember,
@@ -382,6 +419,7 @@ impl Bot {
             .execute()
     }
 
+    /// Get information about a chat member on a telegram chat
     pub fn get_chat_member<ID>(
         self,
         chat_id: ID,
@@ -397,6 +435,7 @@ impl Bot {
             .execute()
     }
 
+    /// Delete the photo of a telegram chat
     pub fn delete_chat_photo<ID: Into<ChatID>>(
         self,
         chat_id: ID,
@@ -406,6 +445,7 @@ impl Bot {
             .execute()
     }
 
+    /// Send a voice to a telegram chat
     pub fn send_voice(
         self,
         send_voice: SendVoice,
@@ -418,6 +458,7 @@ impl Bot {
             .execute()
     }
 
+    /// Get all admins of a telegram chat
     pub fn get_chat_admins<ID: Into<ChatID>>(
         self,
         chat_id: ID,
@@ -463,6 +504,7 @@ impl Bot {
             .execute()
     }
 
+    /// Export an invite link for the chat
     pub fn export_chat_invite_link<ID: Into<ChatID>>(
         self,
         id: ID,
@@ -474,10 +516,12 @@ impl Bot {
             .execute()
     }
 
+    /// Get user information for your bot
     pub fn get_me(self) -> impl Future<Item = (Self, User), Error = BotError> {
         TelegramRequest::new(Method::GET, self.get_route(&"getMe"), self).execute()
     }
 
+    /// Send a video on a telegram chat
     pub fn send_video(
         self,
         send_video: SendVideo,
@@ -490,6 +534,7 @@ impl Bot {
             .execute()
     }
 
+    /// Set the title of a particular telegram chat
     pub fn set_chat_title<ID: Into<ChatID>>(
         self,
         id: ID,
@@ -502,6 +547,7 @@ impl Bot {
             .execute()
     }
 
+    /// Send an animation in a telegram chat
     pub fn send_animation(
         self,
         send_animation: SendAnimation,
@@ -514,6 +560,7 @@ impl Bot {
             .execute()
     }
 
+    /// Stop an on going live location
     pub fn stop_live_location(
         self,
         stop_live_location: StopLiveLocation,
@@ -527,6 +574,7 @@ impl Bot {
         .execute()
     }
 
+    /// Pin a message on a particular telegram chat
     pub fn pin_message<ID: Into<ChatID>>(
         self,
         id: ID,
@@ -540,6 +588,7 @@ impl Bot {
             .execute()
     }
 
+    /// Set the photo of a particular telegram chat
     pub fn set_chat_photo<ID: Into<ChatID>>(
         self,
         chat_id: ID,
