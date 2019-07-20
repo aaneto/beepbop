@@ -64,6 +64,8 @@
 //! );
 //!
 //! ```
+
+/// The prelude module contains a few commonly used modules and objects.
 pub mod prelude {
     pub use crate::bot::Bot;
     pub use crate::error::BotError;

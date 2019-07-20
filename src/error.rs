@@ -1,3 +1,6 @@
+#![deny(missing_docs)]
+//! The Error module define telegram bot related errors
+
 use std::error::Error;
 
 /// Enum representing all variations of errors an bot
