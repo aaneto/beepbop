@@ -18,7 +18,7 @@ use crate::error::BotError;
 use crate::input::Uploader;
 
 /// An HTTP method abstraction enum
-pub enum Method {
+pub(crate) enum Method {
     /// GET HTTP method variant
     GET,
     /// POST HTTP method variant
@@ -26,7 +26,7 @@ pub enum Method {
 }
 
 /// A struct encoding a telegram request created by a particular bot.
-pub struct TelegramRequest {
+pub(crate) struct TelegramRequest {
     builder: RequestBuilder,
     form: Option<Form>,
     bot: Bot,
@@ -34,7 +34,7 @@ pub struct TelegramRequest {
 
 impl TelegramRequest {
     /// Create a new telegram request with a method and a URI.
-    pub fn new(method: Method, route: String, bot: Bot) -> Self {
+    pub(crate) fn new(method: Method, route: String, bot: Bot) -> Self {
         let client = &bot.connection.client;
 
         let request = match method {
@@ -50,7 +50,7 @@ impl TelegramRequest {
     }
 
     /// Append a json body to the request
-    pub fn with_body<B: Serialize + Sized>(mut self, body_data: B) -> Self {
+    pub(crate) fn with_body<B: Serialize + Sized>(mut self, body_data: B) -> Self {
         self.builder = self.builder.json(&body_data);
 
         self
@@ -66,14 +66,14 @@ impl TelegramRequest {
     }
 
     /// Append a query to the request
-    pub fn with_query<Q: Serialize + Sized>(mut self, query_data: Q) -> Self {
+    pub(crate) fn with_query<Q: Serialize + Sized>(mut self, query_data: Q) -> Self {
         self.builder = self.builder.query(&query_data);
 
         self
     }
 
     /// Append a form part to the request
-    pub fn with_form_part(mut self, tag: &str, part: Part) -> Self {
+    pub(crate) fn with_form_part(mut self, tag: &str, part: Part) -> Self {
         if let Some(form) = self.form.take() {
             self.form = Some(form.part(tag.to_owned(), part));
         } else {
@@ -86,7 +86,7 @@ impl TelegramRequest {
     }
 
     /// Append a textual form to the request
-    pub fn with_form_text<S: ToString>(mut self, tag: S, text: S) -> Self {
+    pub(crate) fn with_form_text<S: ToString>(mut self, tag: S, text: S) -> Self {
         if let Some(form) = self.form.take() {
             self.form = Some(form.text(tag.to_string(), text.to_string()));
         } else {
@@ -99,12 +99,12 @@ impl TelegramRequest {
     }
 
     /// Inject an Uploader object into this request
-    pub fn with_uploader(self, tag: &str, uploader: Uploader) -> Self {
+    pub(crate) fn with_uploader(self, tag: &str, uploader: Uploader) -> Self {
         uploader.upload_into(tag, self)
     }
 
     /// Execute this request returning a Future
-    pub fn execute<O: DeserializeOwned + std::fmt::Debug>(
+    pub(crate) fn execute<O: DeserializeOwned + std::fmt::Debug>(
         mut self,
     ) -> impl Future<Item = (Bot, O), Error = BotError> {
         self = self.with_optional_form();
@@ -125,7 +125,7 @@ impl TelegramRequest {
 
 /// A typed container for a default Telegram request
 #[derive(Debug, serde_derive::Serialize, serde_derive::Deserialize)]
-pub struct TelegramResponse<T>
+pub(crate) struct TelegramResponse<T>
 where
     T: std::fmt::Debug,
 {

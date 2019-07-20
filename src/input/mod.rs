@@ -57,7 +57,7 @@ pub struct IdUploader(String);
 
 impl Uploader {
     /// Get a RequestBuilder and add self to it as query or multiform data.
-    pub fn upload_into(self, tag: &str, builder: TelegramRequest) -> TelegramRequest {
+    pub(crate) fn upload_into(self, tag: &str, builder: TelegramRequest) -> TelegramRequest {
         match self {
             Uploader::File(file_uploader) => {
                 let mut request = builder.with_form_part(tag, file_uploader.part);
