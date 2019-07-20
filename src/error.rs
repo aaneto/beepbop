@@ -1,10 +1,16 @@
 use std::error::Error;
 
+/// Enum representing all variations of errors an bot
+/// can return in a Future or otherwise.
 #[derive(Debug)]
 pub enum BotError {
+    /// An BotError related to Telegram related incorrect interactions
     TelegramError(String),
+    /// An BotError related to HTTP requests using reqwest
     RequestError(reqwest::Error),
+    /// An BotError related to File Downloading on Telegram
     DownloadError(String),
+    /// An BotError related to invalid media group formattion
     InvalidMediaGroup(String),
 }
 
