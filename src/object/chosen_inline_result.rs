@@ -2,7 +2,7 @@ use serde_derive::Deserialize;
 
 use crate::object::{Location, User};
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct ChosenInlineResult {
     pub result_id: String,
     pub from: User,

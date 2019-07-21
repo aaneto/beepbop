@@ -2,7 +2,7 @@ use serde_derive::Deserialize;
 
 use crate::object::{Chat, User};
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct Message {
     pub message_id: i64,
     pub date: i64,

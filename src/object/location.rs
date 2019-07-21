@@ -1,6 +1,6 @@
 use serde_derive::Deserialize;
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct Location {
     pub longitude: f64,
     pub latitude: f64,

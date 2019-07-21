@@ -2,7 +2,7 @@ use serde_derive::Deserialize;
 
 use crate::object::LabeledPrice;
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct OrderInfo {
     pub id: String,
     pub title: String,
