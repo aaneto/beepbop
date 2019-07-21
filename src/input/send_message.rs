@@ -17,9 +17,9 @@ pub struct SendMessage {
 }
 
 impl SendMessage {
-    pub fn new(chat_id: ChatID, text: String) -> Self {
+    pub fn new<ID: Into<ChatID>>(chat_id: ID, text: String) -> Self {
         Self {
-            chat_id,
+            chat_id: chat_id.into(),
             text,
             ..Default::default()
         }
