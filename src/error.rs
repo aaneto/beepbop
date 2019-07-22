@@ -1,7 +1,9 @@
 #![deny(missing_docs)]
 //! The Error module define telegram bot related errors
 
+use crate::object::Message;
 use std::error::Error;
+use std::sync::mpsc;
 
 /// Enum representing all variations of errors an bot
 /// can return in a Future or otherwise.
@@ -45,6 +47,48 @@ impl Error for BotError {
             BotError::RequestError(err) => err.description(),
             BotError::DownloadError(err) => err,
             BotError::InvalidMediaGroup(err) => err,
+        }
+    }
+}
+
+type SendMessageError = mpsc::SendError<Message>;
+
+/// The StreamError is an error originated from a stream
+/// of updates.
+#[derive(Debug)]
+pub enum StreamError {
+    /// An error occurred while trying to fetch the updates
+    BotError(BotError),
+    /// An error occurred while trying to send an message to a channel
+    SendMessageError(SendMessageError),
+}
+
+impl From<BotError> for StreamError {
+    fn from(bot_error: BotError) -> StreamError {
+        StreamError::BotError(bot_error)
+    }
+}
+
+impl From<SendMessageError> for StreamError {
+    fn from(send_error: SendMessageError) -> StreamError {
+        StreamError::SendMessageError(send_error)
+    }
+}
+
+impl std::fmt::Display for StreamError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        match self {
+            StreamError::BotError(err) => err.fmt(f),
+            StreamError::SendMessageError(err) => err.fmt(f),
+        }
+    }
+}
+
+impl Error for StreamError {
+    fn description(&self) -> &str {
+        match self {
+            StreamError::BotError(err) => err.description(),
+            StreamError::SendMessageError(err) => err.description(),
         }
     }
 }

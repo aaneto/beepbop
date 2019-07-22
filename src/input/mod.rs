@@ -44,7 +44,7 @@ impl Error for UploaderError {
 /// Filed and URL are just sent by query while POST is a multipart form.
 #[derive(Debug)]
 pub enum Uploader {
-    File(FileUploader),
+    File(Box<FileUploader>),
     Url(UrlUploader),
     Id(IdUploader),
     Empty,
@@ -81,9 +81,15 @@ impl Default for Uploader {
     }
 }
 
+impl From<Box<FileUploader>> for Uploader {
+    fn from(file_uploader: Box<FileUploader>) -> Uploader {
+        Uploader::File(file_uploader)
+    }
+}
+
 impl From<FileUploader> for Uploader {
     fn from(file_uploader: FileUploader) -> Uploader {
-        Uploader::File(file_uploader)
+        Uploader::File(Box::new(file_uploader))
     }
 }
 
@@ -101,7 +107,7 @@ impl From<IdUploader> for Uploader {
 
 impl From<FileUploader> for IdFileUploader {
     fn from(file_uploader: FileUploader) -> IdFileUploader {
-        IdFileUploader(Uploader::File(file_uploader))
+        IdFileUploader(Uploader::File(Box::new(file_uploader)))
     }
 }
 

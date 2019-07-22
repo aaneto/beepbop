@@ -2,7 +2,7 @@ use serde_derive::Deserialize;
 
 use crate::object::{Message, User};
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct CallbackQuery {
     pub id: String,
     pub from: User,

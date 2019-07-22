@@ -39,7 +39,10 @@ pub struct Bot {
 
 impl std::fmt::Debug for Bot {
     fn fmt(&self, fmt: &mut std::fmt::Formatter<'_>) -> Result<(), std::fmt::Error> {
-        write!(fmt, "Bot:{}", self.connection.api_key)
+        match std::env::var("SHOW_BOT_API_KEY") {
+            Ok(_) => write!(fmt, "Bot:{}", self.connection.api_key),
+            Err(_) => write!(fmt, "Bot:[SECURE]"),
+        }
     }
 }
 

@@ -2,7 +2,7 @@ use serde_derive::Deserialize;
 
 use crate::object::{ShippingAddress, User};
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct ShippingQuery {
     pub id: String,
     pub from: User,

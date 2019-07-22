@@ -2,7 +2,7 @@ use serde_derive::Deserialize;
 
 use crate::object::{OrderInfo, User};
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct PrecheckoutQuery {
     pub id: String,
     pub from: User,

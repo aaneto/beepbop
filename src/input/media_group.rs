@@ -135,12 +135,10 @@ impl MediaGroupBuilder {
                 },
                 attachments: self.attachments,
             }),
-            Err(err) => {
-                return Err(BotError::InvalidMediaGroup(format!(
-                    "Cannot deserialize media group: {}",
-                    err.description()
-                )));
-            }
+            Err(err) => Err(BotError::InvalidMediaGroup(format!(
+                "Cannot deserialize media group: {}",
+                err.description()
+            ))),
         }
     }
 

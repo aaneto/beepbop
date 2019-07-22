@@ -4,7 +4,7 @@ use crate::object::{
     CallbackQuery, ChosenInlineResult, InlineQuery, Message, PrecheckoutQuery, ShippingQuery,
 };
 
-#[derive(Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub enum UpdateKind {
     #[serde(rename = "message")]
     Message(Message),

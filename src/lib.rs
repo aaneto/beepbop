@@ -81,6 +81,7 @@ pub mod bot;
 pub mod error;
 pub mod input;
 pub mod object;
+pub mod stream;
 pub mod telegram_request;
 
 mod macros;
